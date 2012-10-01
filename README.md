@@ -3,7 +3,6 @@ a leak-plugging layer on top of backbone.js
 
 ```coffeescript
 $          = require 'jqueryify2'
-datepicker = require 'lib/jquery-ui-1.8.22.datepicker-only.min'
 Backbone   = require 'backbone'
 
 loadModel       = require 'models/loader'
