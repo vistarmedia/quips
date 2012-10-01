@@ -1,0 +1,29 @@
+%form
+  %p
+    %label Name
+    %input{:name => 'name'}
+
+  -# You don't need to specify a container name, this is just used for
+  -# lightening the gymnastics the tests have to do it get a reference
+  %p.age-div
+    %label Age
+    %input{name: 'age'}
+
+  %p
+    %label Birthday
+    %input{name: 'birthday'}
+
+  %p
+    %label Some Date Time Field
+    %input.total-impressions-input{class: 'date', name: 'someDateTime', type: 'text'}
+    %select.total-impressions-input{class: 'time', name: 'someDateTime'}
+
+  %p
+    %label Gender
+    %select{name: 'gender'}
+      %option{value: 'female'} Female
+      %option{value: 'male'} Male
+
+  %p
+    %label Older Than Andrew
+    %input{name: 'olderThanAndrew', type: 'checkbox'}

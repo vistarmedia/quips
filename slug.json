@@ -1,0 +1,17 @@
+{
+  "dependencies": [
+    "jqueryify2",
+    "json2ify",
+    "underscore",
+    "backbone"
+  ],
+
+  "libs": [
+    "./lib/js/swfobject.js",
+    "./lib/js/swfupload.js"
+  ],
+
+  "compilers": {
+    "haml": "hem-compiler-haml"
+  }
+}
