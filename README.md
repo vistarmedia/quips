@@ -1,2 +1,2 @@
-#quip
+#quips
 a leak-plugging layer on top of backbone.js
