@@ -33,7 +33,7 @@ update:
 	@npm install
 
 tags:
-	@ctags -R app
+	@ctags -R .
 
 deploy:
 	@rm -f ./public/application.*

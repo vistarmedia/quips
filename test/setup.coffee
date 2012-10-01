@@ -10,6 +10,7 @@ global.window.confirm = -> true
 global.jQuery         = require 'jqueryify2'
 
 Backbone        = require 'backbone'
+datepicker      = require 'lib/jquery-ui-1.8.22.datepicker-only.min'
 MockHttpServer  = require('./lib/mock_server').MockHttpServer
 collectionTypes = require('models/loader').collectionTypes
 
@@ -69,5 +70,3 @@ module.exports =
 
     unless handed
       request.receive 404, 'Not Found'
-
-require('index').apiRoot = ''

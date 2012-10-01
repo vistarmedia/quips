@@ -6,11 +6,6 @@
     "backbone"
   ],
 
-  "libs": [
-    "./lib/js/swfobject.js",
-    "./lib/js/swfupload.js"
-  ],
-
   "compilers": {
     "haml": "hem-compiler-haml"
   }

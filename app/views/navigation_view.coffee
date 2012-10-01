@@ -3,7 +3,8 @@ View = require 'views/view'
 
 
 class NavigationView extends View
-  template: require 'templates/navigation'
+  template: ->
+    throw 'Must override template'
 
   events:
     'click ul.primary a':   'clickPrimary'
