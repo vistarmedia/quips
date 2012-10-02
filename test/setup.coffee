@@ -12,18 +12,12 @@ global.jQuery         = require 'jqueryify2'
 Backbone        = require 'backbone'
 datepicker      = require 'lib/jquery-ui-1.8.22.datepicker-only.min'
 MockHttpServer  = require('./lib/mock_server').MockHttpServer
-collectionTypes = require('models/loader').collectionTypes
 
 require.extensions['.haml'] = (module, filename) ->
   module._compile(hem.compilers.haml(filename))
 
 
 class TestState
-  constructor: ->
-    @collections = {}
-    for name, collectionType of collectionTypes
-      @collections[name] = new collectionType
-      @collections[name]._collections = @collections
 
   destroy: ->
     module.exports.destroy()

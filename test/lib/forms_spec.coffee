@@ -10,7 +10,8 @@ forms = require 'lib/forms'
 
 
 class TestForm extends forms.FormView
-  template: require './form_view_spec_template'
+  template:       require './form_view_spec_template'
+  errorTemplate:  require './form_error'
 
   fields:
     name:             forms.stringField
@@ -65,10 +66,6 @@ describe 'Form View', ->
     @lilBilly.set(gender: 'male')
     form = new TestForm(@lilBilly).render()
     expect(form.$el.find('select[name=gender] option[selected]')).to.have.val 'male'
-
-  describe 'Date Time Field', ->
-    it 'should use a datepicker in the DOM', ->
-      expect(@form.$el.find('.date.hasDatepicker')).to.be.length 1
 
   describe 'when getting an update', ->
 
