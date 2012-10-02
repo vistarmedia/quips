@@ -15,7 +15,7 @@ else
 MOCHA=$(mocha)
 endif
 
-export NODE_PATH=./app
+export NODE_PATH=./
 
 xunit:
 	$(MOCHA) -R xunit $(FILES)
