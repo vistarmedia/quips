@@ -1,6 +1,7 @@
 module.exports =
   # Models
   Model:  require 'quips/models/model'
+  Loader: require 'quips/models/loader'
   User:   require 'quips/models/user'
 
   # Collections
