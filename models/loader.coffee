@@ -1,18 +1,28 @@
 $ = require 'jqueryify2'
 
+root = ''
 
-module.exports = (collectionTypes, apiRoot) ->
-  apiRoot or= ''
-  collections = {}
 
-  for name, collectionType of collectionTypes
-    collection = new collectionType
-    collection.url = apiRoot + collection.url
-    collections[name] = collection
+module.exports =
 
-  $.when((c.fetch() for _, c of collections)...)
-    .pipe(-> collections)
-    .done ->
-      for _, c of collections
-        c._collections = collections
-    .promise()
+  load: (collectionTypes, apiRoot) ->
+    apiRoot or= ''
+    collections = {}
+
+    for name, collectionType of collectionTypes
+      collection = new collectionType
+      collection.url = apiRoot + collection.url
+      collections[name] = collection
+
+    root = apiRoot
+
+    $.when((c.fetch() for _, c of collections)...)
+      .pipe(-> collections)
+      .done ->
+        for _, c of collections
+          c._collections = collections
+      .promise()
+
+
+  getApiRoot: ->
+    root
