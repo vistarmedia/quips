@@ -78,6 +78,7 @@ class ListView extends View
 
   render: ->
     @_setupTables()
+    @populate()
     this
 
 
