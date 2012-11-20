@@ -49,5 +49,7 @@ class FilteredCollection extends Collection
       else
         if @get(model.id) then @remove(model)
 
+    @trigger('change')
+
 
 module.exports = FilteredCollection
