@@ -28,6 +28,7 @@ class LoginView extends View
     credentials =
       email:    @$email.val()
       password: @$password.val()
+      opts:     @options
 
     @trigger('change', credentials)
 
