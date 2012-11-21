@@ -44,7 +44,7 @@ class LoginController extends Controller
   checkCredentials: (credentials) =>
     @loginView.disable()
 
-    @auth(credentials.email, credentials.password)
+    @auth(credentials.email, credentials.password, credentials.opts)
       .always(@loginView.enable)
       .done(@deferred.resolve)
       .fail((msg) => @noticeView.error(msg))

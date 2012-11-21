@@ -24,13 +24,17 @@ class User
 
   # Given an email and password autentication, return the user in question, or
   # an error (which always indicates that the credentials cannot be validated)
-  @authenticate: (email, password) ->
+  @authenticate: (email, password, opts) ->
+    data = email: email, password: password
+    if opts?
+      $.extend(data, opts)
+
     resp = $.ajax
       type:         'POST'
       dataType:     'json'
       contentType:  'application/json'
       url:          authUrl
-      data:         JSON.stringify(email: email, password: password)
+      data:         JSON.stringify(data)
 
     resp.pipe(User.fromResponse, -> 'Invalid Login')
       .done((user) -> User.current = user)
