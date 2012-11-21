@@ -21,7 +21,12 @@ class LoginController extends Controller
 
   constructor: (layout, LoginViewClass, opts) ->
     @layout = layout
-    @whoami = User.fetch
+
+    if opts.whoami?
+      @whoami = opts.whoami
+    else
+      @whoami = User.fetch
+
     @auth   = User.authenticate
 
     @loginView  = new LoginViewClass().render()
