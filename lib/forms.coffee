@@ -53,8 +53,7 @@ class FormView extends View
     this
 
   _hideErrors: ->
-    @$el.find('ul.errors').remove()
-    @$el.find('.error').removeClass('error')
+    @$el.find('.error').remove()
 
   _showErrors: (errs) ->
     for name, errors of errs
