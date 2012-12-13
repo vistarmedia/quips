@@ -58,7 +58,7 @@ class FormView extends View
 
   _showErrors: (errs) ->
     for name, errors of errs
-      @$el.find("[name=#{name}]")
+      @$el.find("[name=#{name}]").last()
         .after(@errorTemplate(errors: errors))
         .parent().addClass('error')
 
