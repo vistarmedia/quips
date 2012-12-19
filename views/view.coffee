@@ -8,6 +8,9 @@ class View extends Backbone.View
   constructor: ->
     super
 
+    if navigator?
+      require '../lib/jquery.blockUI'
+
     @_childViews = []
 
   append: (item, $el = null) ->
@@ -41,6 +44,23 @@ class View extends Backbone.View
     for selector, field of @elements
       @[field] = @$(selector)
 
+  block: (opts) ->
+    if @_blockAvailable()
+      $.blockUI
+        message: opts?.message or 'Loading...'
+        css:
+          border: 'none'
+          padding: opts?.css?.padding or '30px'
+          backgroundColor: opts?.css?.backgroundColor or '#000'
+          '-webkit-border-radius': '10px'
+          '-moz-border-radius': '10px'
+          opacity: opts?.css?.opacity or .7
+          color: opts?.css?.color or '#fff'
+
+  unblock: ->
+    if @_blockAvailable()
+      $.unblockUI()
+
   render: ->
     if @model?
       @html @template(@model.json())
@@ -55,5 +75,9 @@ class View extends Backbone.View
       $(table).find('.row').each (j, row) ->
         if j % 2 isnt 0
           $(row).addClass('striped')
+
+  _blockAvailable: ->
+    $.blockUI?
+
 
 module.exports = events.track View
