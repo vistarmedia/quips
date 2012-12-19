@@ -1,10 +1,14 @@
-View = require './view'
+View    = require './view'
+Sticky  = require 'lib/sticky'
 
 
 class DetailView extends View
 
   events:
     'click .delete': 'delete'
+
+  constructor: (@opts) ->
+    super
 
   show: (@item) ->
     @render()
@@ -20,6 +24,10 @@ class DetailView extends View
   render: ->
     return this unless @item?
     @html @template(@item.json())
+
+    if opts.sticky
+      Sticky.stickify(@$el)
+
     this
 
 
