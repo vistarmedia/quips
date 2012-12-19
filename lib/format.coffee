@@ -42,7 +42,7 @@ formatNumber = (number, places) ->
            (if places then "." + Math.abs(number - i).toFixed(places).slice(2) else "")
 
 modelNames = (models) ->
-  names = model.get('name') for model in models
+  names = (model.get('name') for model in models)
   if names.length < 3
     names.join(' and ')
   else
