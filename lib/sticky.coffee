@@ -1,4 +1,4 @@
-require 'lib/stickysidebar.jquery'
+require './stickysidebar.jquery'
 
 available = ->
   document.documentElement?

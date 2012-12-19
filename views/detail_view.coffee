@@ -1,5 +1,5 @@
 View    = require './view'
-Sticky  = require 'lib/sticky'
+Sticky  = require '../lib/sticky'
 
 
 class DetailView extends View
@@ -25,7 +25,7 @@ class DetailView extends View
     return this unless @item?
     @html @template(@item.json())
 
-    if opts.sticky
+    if @opts.sticky
       Sticky.stickify(@$el)
 
     this
