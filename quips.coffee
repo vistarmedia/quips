@@ -34,11 +34,12 @@ module.exports =
 
   # Formatters
   formatters:
-    date:     require('quips/lib/format').date
-    dateTime: require('quips/lib/format').dateTime
-    boolean:  require('quips/lib/format').boolean
-    money:    require('quips/lib/format').money
-    number:   require('quips/lib/format').number
+    date:       require('quips/lib/format').date
+    dateTime:   require('quips/lib/format').dateTime
+    boolean:    require('quips/lib/format').boolean
+    money:      require('quips/lib/format').money
+    number:     require('quips/lib/format').number
+    modelNames: require('quips/lib/format').modelNames
 
   # Test
   ChaiExtensions: require 'quips/test/lib/chai_extensions'
