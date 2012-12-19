@@ -41,9 +41,17 @@ formatNumber = (number, places) ->
            i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ',') +
            (if places then "." + Math.abs(number - i).toFixed(places).slice(2) else "")
 
+modelNames = (models) ->
+  names = model.get('name') for model in models
+  if names.length < 3
+    names.join(' and ')
+  else
+    "#{names[0...names.length-1].join(', ')}, and #{names[names.length-1]}"
+
 module.exports =
-  date:     date
-  dateTime: dateTime
-  boolean:  boolean
-  money:    money
-  number:   number
+  date:       date
+  dateTime:   dateTime
+  boolean:    boolean
+  money:      money
+  number:     number
+  modelNames: modelNames
