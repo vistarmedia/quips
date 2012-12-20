@@ -64,7 +64,7 @@ class View extends Backbone.View
 
   unblock: ->
     if @_blockAvailable()
-      if @$el.find('.blockUI')
+      if @$el.find('.blockUI').length
         @$el.unblock()
       else
         $.unblockUI()
