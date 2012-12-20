@@ -16,7 +16,8 @@ class FilteredCollection extends Collection
     @reset(@collection.models)
 
   collectionReset: (c) ->
-    @reset(c.models)
+    @collection = c
+    @reset([])
     @update()
 
   addUnfiltered: (model) ->

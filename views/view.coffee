@@ -46,20 +46,28 @@ class View extends Backbone.View
 
   block: (opts) ->
     if @_blockAvailable()
-      $.blockUI
-        message: opts?.message or 'Loading...'
-        css:
-          border: 'none'
-          padding: opts?.css?.padding or '30px'
-          backgroundColor: opts?.css?.backgroundColor or '#000'
-          '-webkit-border-radius': '10px'
-          '-moz-border-radius': '10px'
-          opacity: opts?.css?.opacity or .7
-          color: opts?.css?.color or '#fff'
+      blockOpts =
+          message: opts?.message or 'Loading...'
+          css:
+            border: 'none'
+            padding: opts?.css?.padding or '30px'
+            backgroundColor: opts?.css?.backgroundColor or '#000'
+            '-webkit-border-radius': '10px'
+            '-moz-border-radius': '10px'
+            opacity: opts?.css?.opacity or .7
+            color: opts?.css?.color or '#fff'
+
+      if opts?.local
+        @$el.block(blockOpts)
+      else
+        $.blockUI(blockOpts)
 
   unblock: ->
     if @_blockAvailable()
-      $.unblockUI()
+      if @$el.find('.blockUI')
+        @$el.unblock()
+      else
+        $.unblockUI()
 
   render: ->
     if @model?

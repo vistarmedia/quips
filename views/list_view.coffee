@@ -65,6 +65,9 @@ class ListView extends View
       cursor?.after el
       cursor = el
 
+  clearSelection: ->
+    @$el.find('.selected').removeClass('selected')
+
   _reset: ->
     @listEl().empty()
     @_addItem(i) for i in @items.models
