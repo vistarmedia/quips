@@ -26,7 +26,8 @@ class DetailView extends View
     @html @template(@item.json())
 
     if @opts?.sticky
-      Sticky.stickify(@$el)
+      Sticky.stickify @$el,
+        padding: @opts?.stickyPadding or 0
 
     this
 

@@ -4,9 +4,11 @@ available = ->
   document.documentElement?
 
 module.exports =
-  stickify: ($el) ->
+  stickify: ($el, opts) ->
     if available()
-      $el.stickySidebar(padding: 0, speed: 0)
+      $el.stickySidebar
+        padding: opts?.padding or 0
+        speed: opts?.speed or 0
 
   unstickify: ($el) ->
     if available()
