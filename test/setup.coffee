@@ -41,7 +41,7 @@ module.exports =
     throw new Error(arguments...)
 
   _setup: ->
-    Backbone.$ = jQuery
+    Backbone.setDomLibrary jQuery
 
     chai = require 'chai'
     ext  = require './lib/chai_extensions'
