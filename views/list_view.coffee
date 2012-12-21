@@ -70,6 +70,7 @@ class ListView extends View
 
   _reset: ->
     @listEl().empty()
+    @rows = {}
     @_addItem(i) for i in @items.models
 
   _addItem: (item) ->
