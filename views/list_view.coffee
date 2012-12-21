@@ -76,7 +76,9 @@ class ListView extends View
     rowClass = @rowClass or RowView
     row = new rowClass(item, @template).render()
     @rows[item.id] = row
-    item.on('remove', (=> delete @rows[item.id]), this)
+    item.on('remove', (=>
+      @rows[item.id]?.remove()
+      delete @rows[item.id]), this)
     @append(row, @listEl())
     row.on('select', ((model) -> @trigger 'select', model), this)
 

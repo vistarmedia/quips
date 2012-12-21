@@ -11,8 +11,9 @@ class FilteredCollection extends Collection
     @model = @collection.model
 
     @filters = {}
-    @collection.on('add',   @addUnfiltered, this)
-    @collection.on('reset', @collectionReset, this)
+    @collection.on('add',     @addUnfiltered, this)
+    @collection.on('remove',  @remove, this)
+    @collection.on('reset',   @collectionReset, this)
     @reset(@collection.models)
 
   collectionReset: (c) ->
