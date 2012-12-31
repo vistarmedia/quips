@@ -104,13 +104,21 @@ describe 'Form View', ->
 
     it 'should return errors from server', (done) ->
       test.when 'POST', '/lils/billy', (req) ->
-          status: 400
-          body:   JSON.stringify
-            age: ['None uh yer beeswax!']
+        status: 400
+        body:   JSON.stringify
+          age: ['None uh yer beeswax!']
 
       @form.save().fail (errors) ->
         expect(errors.age).to.have.length 1
         expect(errors.age[0]).to.equal 'None uh yer beeswax!'
+        done()
+
+    it 'should handle error with empty response', (done) ->
+      test.when 'POST', '/lils/billy', (req) ->
+        status: 500
+
+      @form.save().fail (errors) ->
+        expect(errors).to.not.be.an.instanceof(SyntaxError)
         done()
 
     it 'should throw an exception with invalid input', ->
