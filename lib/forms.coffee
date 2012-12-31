@@ -26,6 +26,7 @@ class FormView extends View
 
     onError = (errors) =>
       local.reject(errors)
+      @deferred.reject(errors)
       @_showErrors(errors)
 
     onSuccess = =>
