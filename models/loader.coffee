@@ -16,7 +16,7 @@ module.exports =
 
     root = apiRoot
 
-    $.when((c.fetch() for _, c of collections)...)
+    $.when((c.fetch() for _, c of collections when not c.lazy)...)
       .pipe(-> collections)
       .done ->
         for _, c of collections

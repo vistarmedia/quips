@@ -9,4 +9,6 @@ class Collection extends Backbone.Collection
     model.collection = this
     model
 
+  lazy: false
+
 module.exports = events.track Collection
