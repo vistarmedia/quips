@@ -8,6 +8,8 @@ Model       = require 'models/model'
 load = require('models/loader').load
 
 
+class MockModel extends Model
+
 describe 'Model Loader', ->
 
   beforeEach ->
@@ -15,6 +17,28 @@ describe 'Model Loader', ->
 
   afterEach ->
     @state.destroy()
+
+  it 'should handle collections with a url func', (done) ->
+    test.when 'GET', 'api-root/my/mock/url', (req) ->
+      status: 200
+
+    test.when 'GET', 'api-root/my/mock/func/url', (req) ->
+      status: 200
+
+    class MockCollection extends Collection
+      model: MockModel
+      url:   '/my/mock/url'
+
+    class MockFuncCollection extends Collection
+      model: MockModel
+      url:   -> '/my/mock/func/url'
+
+    collections =
+      value:  MockCollection
+      func:   MockFuncCollection
+
+    load(collections, 'api-root').done ->
+      done()
 
   it 'should not fetch lazy collections', (done) ->
     fetches = 0
@@ -29,7 +53,6 @@ describe 'Model Loader', ->
       status: 200
       body: '{"id": "lazy-item-1"}'
 
-    class MockModel extends Model
 
     class RegularCollection extends Collection
       model:  MockModel
