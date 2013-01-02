@@ -48,6 +48,7 @@ class View extends Backbone.View
     if @_blockAvailable()
       blockOpts =
           message: opts?.message or 'Loading...'
+          ignoreIfBlocked: true
           css:
             border: 'none'
             padding: opts?.css?.padding or '30px'

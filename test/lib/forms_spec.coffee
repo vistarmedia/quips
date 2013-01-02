@@ -121,6 +121,28 @@ describe 'Form View', ->
         expect(errors).to.not.be.an.instanceof(SyntaxError)
         done()
 
+    it 'should notify instance deferred on success', (done) ->
+      test.when 'POST', '/lils/billy', (req) ->
+        status: 200
+
+      @form.deferred.progress ->
+        done()
+
+      @form.save()
+
+    it 'should notify instance deferred on error', (done) ->
+      test.when 'POST', '/lils/billy', (req) ->
+        status: 400
+        body:   JSON.stringify
+          age: ['None uh yer beeswax!']
+
+      @form.deferred.progress (errors) ->
+        expect(errors.age).to.have.length 1
+        expect(errors.age[0]).to.equal 'None uh yer beeswax!'
+        done()
+
+      @form.save()
+
     it 'should throw an exception with invalid input', ->
       @form.$el.find('[name=birthday]').val("HOW DO YOU USE THIS THING?")
 
