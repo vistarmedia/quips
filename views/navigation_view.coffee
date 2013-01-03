@@ -27,17 +27,16 @@ class NavigationView extends View
   updateSecondary: (location) ->
     # If the location is null, we're at the index and nothing should be active
     if location.length <= 0
-      @$('ul.primary li a').removeClass('active')
-      @$('ul.secondary li a').removeClass('active')
+      @$('ul.primary li').removeClass('active')
+      @$('ul.secondary li').removeClass('active')
     else
-      firstUrlPart = location.match(/(#\/[^\/]+\/).*/)[1]
-      updated = @$("[href=\"#{firstUrlPart}\"]")
-      for primary in @$('ul.primary > li > a')
+      updated = @$("[href=\"#{location}\"]").parent()
+      for primary in @$('ul.primary > li')
         primaryClass = $(primary).attr('class')
         if updated.parents('ul').hasClass(primaryClass)
           @selectPrimary(primaryClass)
 
-      @$('ul.secondary li a').removeClass('active')
+      @$('ul.secondary li').removeClass('active')
       updated.addClass('active')
 
   render: ->
