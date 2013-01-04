@@ -3,6 +3,8 @@ a leak-plugging layer on top of backbone.js
 
 a basic example can be found here: http://github.com/vistarmedia/quips-example
 
+[![Build Status](https://api.travis-ci.org/vistarmedia/quips.png?branch=master)](http://travis-ci.org/vistarmedia/quips?branch=master)
+
 ###Installation
 ```bash
 npm install quips
