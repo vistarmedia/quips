@@ -20,7 +20,7 @@
     "node": "*"
   },
   "author": "Vistar Media (http://www.vistarmedia.com)",
-  "description": "a leak-plugging layer on top of backbone.js",
+  "description": "a leak-plugging layer on top of backbone.js with some UI enhancements",
   "repository": {
     "type": "git",
     "url": "git://github.com/vistarmedia/quips.git"
