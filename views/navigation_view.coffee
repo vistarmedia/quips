@@ -11,6 +11,7 @@ class NavigationView extends View
   clickPrimary: (e) ->
     e.preventDefault()
     @selectPrimary $(e.currentTarget).attr('class')
+    @trigger('primaryClick', $(e.currentTarget).attr('href'))
 
   selectPrimary: (name) ->
     link = @$("a.#{name}")

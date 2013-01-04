@@ -11,11 +11,14 @@ class NavigationController extends Controller
   views:
     'div': 'navigation'
 
-  constructor: (@user, template, opts) ->
-    @navigation = new NavigationView(@user, template).render()
-    super(opts)
+  events:
+    'navigation.primaryClick': 'primaryClick'
 
-    @history = opts.history or Backbone.history
+  constructor: (@user, template, @opts) ->
+    @navigation = new NavigationView(@user, template).render()
+    super(@opts)
+
+    @history = @opts.history or Backbone.history
     @history.on('route', @navigated, this)
 
   destroy: ->
@@ -24,5 +27,9 @@ class NavigationController extends Controller
 
   navigated: ->
     @navigation.updateSecondary(document.location.hash)
+
+  primaryClick: (url) ->
+    if @opts.navigateOnPrimaryClick
+      @history.navigate url
 
 module.exports = NavigationController
