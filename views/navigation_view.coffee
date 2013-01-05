@@ -32,7 +32,7 @@ class NavigationView extends View
       @$('ul.secondary li').removeClass('active')
     else
       updated = @$("[href=\"#{location}\"]").parent()
-      for primary in @$('ul.primary > li')
+      for primary in @$('ul.primary > li > a')
         primaryClass = $(primary).attr('class')
         if updated.parents('ul').hasClass(primaryClass)
           @selectPrimary(primaryClass)
