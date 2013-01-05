@@ -42,9 +42,10 @@ class ListView extends View
     super
 
     @rows = {}
-    @items.on 'add',    @_addItem,  this
-    @items.on 'reset',  @_reset,    this
-    @items.on 'change', @render,    this
+    @items.on 'add',    @_addItem,    this
+    @items.on 'remove', @_removeItem, this
+    @items.on 'reset',  @_reset,      this
+    @items.on 'change', @render,      this
 
     if @layout? then @append(@layout())
     @_reset()
@@ -77,11 +78,12 @@ class ListView extends View
     rowClass = @rowClass or RowView
     row = new rowClass(item, @template).render()
     @rows[item.id] = row
-    item.on('remove', (=>
-      @rows[item.id]?.remove()
-      delete @rows[item.id]), this)
     @append(row, @listEl())
     row.on('select', ((model) -> @trigger 'select', model), this)
+
+  _removeItem: (item) ->
+    @rows[item.id]?.remove()
+    delete @rows[item.id]
 
   render: ->
     @_setupTables()

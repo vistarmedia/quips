@@ -35,9 +35,8 @@ describe 'ListView', ->
     listeners = -> (v for k, v of model._callbacks)
 
     # First is caused by adding it to the backbone collection. Next two are the
-    # change and delete listeners in the RowView. Last is in the _addItem
-    # on ListView
-    expect(do listeners).to.have.length 4
+    # change and delete listeners in the RowView.
+    expect(do listeners).to.have.length 3
 
     listView.remove()
 
