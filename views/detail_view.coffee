@@ -24,6 +24,7 @@ class DetailView extends View
   render: ->
     return this unless @item?
     @html @template(@item.json())
+    @populate()
 
     if @opts?.sticky
       Sticky.stickify @$el,
