@@ -1,4 +1,5 @@
 $ = require 'jqueryify2'
+combine = require('lib/combiner').combine
 
 root = ''
 
@@ -21,7 +22,7 @@ module.exports =
 
     root = apiRoot
 
-    $.when((c.fetch() for _, c of collections when not c.lazy)...)
+    combine((c.fetch() for _, c of collections when not c.lazy))
       .pipe(-> collections)
       .done ->
         for _, c of collections
