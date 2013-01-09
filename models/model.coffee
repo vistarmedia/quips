@@ -20,9 +20,22 @@ class Model extends Backbone.Model
   # on creation and update. This is at odds with using toJSON in the views,
   # which is generally both basic and computed attributes.
   #
-  # For simplicity's sake, we'll just using json(), and let Backbone own
-  # toJSON()
-  json: ->_.extend(@toJSON(), @extraAttributes())
+  # Each object will have a "extend" method -- often useful when overriding
+  # templates. For example
+  #
+  #     class MyWidget extends Quips.View
+  #       _template: require 'cool/pics'
+  #
+  #       constructor: (@width, @model) ->
+  #         super()
+  #
+  #       template: (json) ->
+  #         @_template(json.extend(width: @width))
+  #
+  json: ->
+    params = _.extend(@toJSON(), @extraAttributes())
+    params.extend = (extra) -> _.extend(params, extra)
+    params
 
   extraAttributes: -> {}
 
