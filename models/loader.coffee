@@ -1,5 +1,5 @@
 $ = require 'jqueryify2'
-combine = require('lib/combiner').combine
+combine = require('../lib/combiner').combine
 
 root = ''
 
