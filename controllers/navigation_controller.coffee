@@ -30,6 +30,9 @@ class NavigationController extends Controller
 
   primaryClick: (url) ->
     if @opts.navigateOnPrimaryClick
-      @history.navigate url
+      if '#' in url
+        @history.navigate url
+      else
+        document.location = url
 
 module.exports = NavigationController
