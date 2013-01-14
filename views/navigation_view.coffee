@@ -27,11 +27,17 @@ class NavigationView extends View
 
   updateSecondary: (location) ->
     # If the location is null, we're at the index and nothing should be active
+    updated = @$('<li>')
+
     if location.length <= 0
       @$('ul.primary li').removeClass('active')
       @$('ul.secondary li').removeClass('active')
     else
-      updated = @$("[href=\"#{location}\"]").parent()
+      @$('ul.secondary> li > a').each (i, item) ->
+        $item = @$(item)
+        href = $item.attr('href')
+        if location[0...href.length] is href
+          updated = $item.parent()
       for primary in @$('ul.primary > li > a')
         primaryClass = $(primary).attr('class')
         if updated.parents('ul').hasClass(primaryClass)
