@@ -7,7 +7,8 @@ module.exports =
 
     for d in deferreds
       do (d) ->
-        d.done ->
+        d.fail(combined.reject)
+         .done ->
           combined.notify(d)
           if --remaining <= 0
             combined.resolve(deferreds)
