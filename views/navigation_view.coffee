@@ -15,36 +15,45 @@ class NavigationView extends View
     @trigger('primaryClick', $(e.currentTarget).attr('href'))
 
   selectPrimary: (name) ->
-    link = $("a.#{name}")
-    menu = $("ul.secondary.#{name}")
+    link = @$el.find("a.#{name}")
+    menu = @$el.find("ul.secondary.#{name}")
 
     link.parent('li').addClass('active')
       .siblings().removeClass('active')
 
-    menu.addClass('active')
-      .siblings().removeClass('active')
+    if menu.length > 0
+      menu.addClass('active')
+        .siblings().removeClass('active')
+    else
+      @$el.find("ul.secondary.active").removeClass("active")
 
     @trigger('selected', name)
 
   updateSecondary: (location) ->
     # If the location is null, we're at the index and nothing should be active
     updated = $('<li>')
-
+    linkInSecondary = false
     if location.length <= 0
-      $('ul.primary li').removeClass('active')
-      $('ul.secondary li').removeClass('active')
+      @$el.find('ul.primary li').removeClass('active')
+      @$el.find('ul.secondary li').removeClass('active')
     else
-      $('ul.secondary> li > a').each (i, item) ->
-        $item = $(item)
-        href = $item.attr('href')
+      for secondary in @$el.find('ul.secondary > li > a')
+        href = $(secondary).attr('href')
         if location[0...href.length] is href
-          updated = $item.parent()
-      for primary in $('ul.primary > li > a')
-        primaryClass = $(primary).attr('class')
-        if updated.parents('ul').hasClass(primaryClass)
-          @selectPrimary(primaryClass)
+          updated = $(secondary).parent()
+          linkInSecondary = true
 
-      $('ul.secondary li').removeClass('active')
+      for primary in @$el.find('ul.primary > li > a')
+        primaryClass = $(primary).attr('class')
+        if linkInSecondary
+          if updated.parents('ul').hasClass(primaryClass)
+            @selectPrimary(primaryClass)
+        else
+          href = $(primary).attr('href')
+          if location[0...href.length] is href
+            @selectPrimary $(primary).attr('class')
+
+      @$el.find('ul.secondary li').removeClass('active')
       updated.addClass('active')
 
   render: ->
