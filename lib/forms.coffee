@@ -150,7 +150,7 @@ dateField =
 
   set: (el, value) ->
     date = if value? then new Date(value) else Date.now()
-    el.val(date.toString('MM/dd/yyyy hh:mm:ss tt'))
+    el.val(date.toString('MM/dd/yyyy'))
 
 
 dateTimeField =
