@@ -29,7 +29,7 @@ module.exports =
   intField:       require('quips/lib/forms').intField
   moneyField:     require('quips/lib/forms').moneyField
   boolField:      require('quips/lib/forms').boolField
-  dateField:      require('quips/lib/forms').stringField
+  dateField:      require('quips/lib/forms').dateField
   dateTimeField:  require('quips/lib/forms').dateTimeField
 
   # Formatters
