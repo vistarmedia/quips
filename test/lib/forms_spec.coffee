@@ -54,7 +54,7 @@ describe 'Form View', ->
     @lilBilly.set(birthday: '1991-02-24T04:22:34Z')
     form = new TestForm(@lilBilly).render()
 
-    expect(form.$el.find('[name=birthday]').val()).to.equal '02/23/1991 11:22:34 PM'
+    expect(form.$el.find('[name=birthday]').val()).to.equal '02/23/1991'
 
   it 'should come up with sane default dates', ->
     @lilBilly.set(birthday: undefined)
@@ -227,7 +227,7 @@ describe 'Date Field', ->
     it 'should set a date', ->
       @el.val('')
       forms.dateField.set(@el, '1999-04-22T13:45:55Z')
-      expect(@el.val()).to.equal '04/22/1999 08:45:55 AM'
+      expect(@el.val()).to.equal '04/22/1999'
 
 
   describe 'when getting a value', ->
