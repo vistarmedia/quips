@@ -130,6 +130,15 @@ describe 'Form View', ->
 
       @form.save()
 
+    it 'should fire a saved event on success', (done) ->
+      test.when 'POST', '/lils/billy', (req) ->
+        status: 200
+
+      @form.on('saved', (->
+        done()), @form)
+
+      @form.save()
+
     it 'should notify instance deferred on error', (done) ->
       test.when 'POST', '/lils/billy', (req) ->
         status: 400
