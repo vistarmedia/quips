@@ -33,6 +33,7 @@ class FormView extends View
       local.resolve(@model)
       @deferred.notify()
       @deferred.resolve(@model)
+      @trigger('saved')
 
     @_hideErrors()
     @_disableForm()
