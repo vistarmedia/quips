@@ -1,4 +1,5 @@
 $        = require 'jqueryify2'
+_        = require 'underscore'
 Backbone = require 'backbone'
 
 events = require '../lib/events'
@@ -77,7 +78,11 @@ class View extends Backbone.View
       @html @template()
     @populate()
     @_setupTables()
+    @_focusFirst()
     this
+
+  _focusFirst: ->
+    _.defer(=> @$el.find('input:text').filter(':visible').first().focus())
 
   _setupTables: ->
     $.each @$el.find('.table-striped'), (i, table) ->
