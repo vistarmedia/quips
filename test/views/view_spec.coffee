@@ -41,6 +41,47 @@ describe 'View', ->
     view = new TemplateView().render()
     expect(view.$el.html()).to.include '<h1 class="party">Hello, frank!</h1>'
 
+  it 'should populate child views', ->
+    root = $('<div></div>')
+
+    class ChildView extends View
+      template: -> "hello world"
+
+    class TemplateView extends View
+      views:
+        '.child-view': 'childView'
+
+      template: require './test_template'
+
+      constructor: ->
+        @childView = new ChildView().render()
+        super
+
+    view = new TemplateView(el: root).render()
+    expect(view.$el.html()).to.include 'hello world'
+
+  it 'should be able to use views if it is a function', ->
+    root = $('<div></div>')
+
+    class ChildView extends View
+      template: -> "hello world"
+
+    class TemplateView extends View
+      views: ->
+        if(true)
+          '.child-view': 'childView'
+        else
+          {}
+
+      template: require './test_template'
+
+      constructor: ->
+        @childView = new ChildView().render()
+        super
+
+    view = new TemplateView(el: root).render()
+    expect(view.$el.html()).to.include 'hello world'
+
   describe 'View removal', ->
 
     it 'should not leak events', ->

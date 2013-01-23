@@ -39,7 +39,7 @@ class View extends Backbone.View
     super
 
   populate: ->
-    for selector, viewName of @views
+    for selector, viewName of _.result(this, 'views')
       @$el.find(selector).append(@[viewName].el)
 
     for selector, field of @elements
