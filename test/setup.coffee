@@ -6,8 +6,9 @@ jsdom = require('jsdom').jsdom
 global.document or= jsdom()
 global.window   or= global.document.createWindow()
 
-global.window.confirm = -> true
-global.jQuery         = require 'jqueryify2'
+global.window.confirm  = -> true
+global.jQuery          = require 'jqueryify2'
+global.jQuery.contains = -> true
 
 Backbone        = require 'backbone'
 datepicker      = require 'lib/jquery-ui-1.8.22.datepicker-only.min'
