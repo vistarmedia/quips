@@ -1,6 +1,7 @@
 test    = require '../setup'
 expect  = require('chai').expect
 $       = require 'jqueryify2'
+_       = require 'underscore'
 
 lists = require 'views/list_view'
 
@@ -32,7 +33,7 @@ describe 'ListView', ->
     @collection.add model
 
     listView = new lists.ListView(@collection)
-    listeners = -> (v for k, v of model._callbacks)
+    listeners = -> _.flatten((v for k, v of model._events))
 
     # First is caused by adding it to the backbone collection. Next two are the
     # change and delete listeners in the RowView.

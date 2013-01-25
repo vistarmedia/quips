@@ -20,7 +20,7 @@ class ClickView extends View
     'click':    'clicked'
 
   constructor: (@label) ->
-    super
+    super()
 
   clicked: -> @trigger('clicked', this)
 

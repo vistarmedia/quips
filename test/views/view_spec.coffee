@@ -3,6 +3,7 @@ expect  = require('chai').expect
 
 Backbone  = require 'backbone'
 $         = require 'jqueryify2'
+_         = require 'underscore'
 
 View  = require 'views/view'
 Model = require 'models/model'
@@ -82,7 +83,7 @@ describe 'View', ->
     view = new TemplateView(el: root).render()
     expect(view.$el.html()).to.include 'hello world'
 
-  describe 'View removal', ->
+  describe 'removal', ->
 
     it 'should not leak events', ->
       class NoLeaks extends View
@@ -91,10 +92,10 @@ describe 'View', ->
           @model.on 'reset', @render, this
 
       model = new Model()
-      expect(model._callbacks).to.be.undefined
+      expect(model._events).to.be.undefined
       view = new NoLeaks(model)
 
-      listeners = -> (v for k, v of model._callbacks)
+      listeners = -> _.flatten((v for k, v of model._events))
       expect(do listeners).to.have.length 1
 
       view.remove()
