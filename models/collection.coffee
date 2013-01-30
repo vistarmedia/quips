@@ -11,4 +11,14 @@ class Collection extends Backbone.Collection
 
   lazy: false
 
+  syncTo: (otherCol) ->
+    @on('sync add remove', ((model, resp, opts) ->
+      unless opts.from_handler
+        otherCol.fetch(update: true, from_handler: true)), this)
+
+    otherCol.on('sync add remove', ((model, resp, opts) =>
+      unless opts.from_handler
+        @fetch(update: true, from_handler: true)), this)
+
+
 module.exports = events.track Collection
