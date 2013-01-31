@@ -38,7 +38,7 @@ class ListView extends View
 
   template: ->
 
-  constructor: (@items, @rowClass) ->
+  constructor: (@items, @rowClass, opts) ->
     super
 
     @rows = {}
@@ -48,6 +48,14 @@ class ListView extends View
     @items.on 'change', @render,      this
 
     if @layout? then @append(@layout())
+
+    if opts?.sort?
+      @items.comparator = opts.sort
+      @items.sort()
+
+    if opts?.limit?
+      @limit = opts.limit
+
     @_reset()
 
   select: (item) ->
@@ -75,11 +83,12 @@ class ListView extends View
     @_addItem(i) for i in @items.models
 
   _addItem: (item) ->
-    rowClass = @rowClass or RowView
-    row = new rowClass(item, @template).render()
-    @rows[item.id] = row
-    @append(row, @listEl())
-    row.on('select', ((model) -> @trigger 'select', model), this)
+    if not @limit? or _.keys(@rows).length < @limit
+      rowClass = @rowClass or RowView
+      row = new rowClass(item, @template).render()
+      @rows[item.id] = row
+      @append(row, @listEl())
+      row.on('select', ((model) -> @trigger 'select', model), this)
 
   _removeItem: (item) ->
     @rows[item.id]?.remove()

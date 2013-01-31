@@ -155,3 +155,56 @@ describe 'ListView', ->
     expect(view.$el.find('.row.striped')).to.have.length 2
     expect($(view.$el.find('.row')[1])).to.have.class 'striped'
     expect($(view.$el.find('.row')[3])).to.have.class 'striped'
+
+  it 'should sort when passed a sort func', ->
+    @collection.add id: 'd', name: 'Ddd'
+    @collection.add id: 'z', name: 'Zzz'
+    @collection.add id: 'm', name: 'Mmm'
+    @collection.add id: 'a', name: 'Aaa'
+
+    expect(@collection.models[0].get('name')).to.equal 'Ddd'
+    expect(@collection.models[1].get('name')).to.equal 'Zzz'
+    expect(@collection.models[2].get('name')).to.equal 'Mmm'
+    expect(@collection.models[3].get('name')).to.equal 'Aaa'
+
+    view = new lists.ListView @collection, lists.RowView,
+      sort: (item) -> item.get('name')
+
+    orderedIds = _.keys view.rows
+
+    expect(orderedIds[0]).to.equal 'a'
+    expect(orderedIds[1]).to.equal 'd'
+    expect(orderedIds[2]).to.equal 'm'
+    expect(orderedIds[3]).to.equal 'z'
+
+  it 'should limit when passed a limit', ->
+    @collection.add id: 'd', name: 'Ddd'
+    @collection.add id: 'z', name: 'Zzz'
+    @collection.add id: 'm', name: 'Mmm'
+    @collection.add id: 'a', name: 'Aaa'
+
+    view = new lists.ListView @collection, lists.RowView, limit: 2
+
+    orderedIds = _.keys view.rows
+
+    expect(orderedIds).to.have.length 2
+
+    expect(orderedIds[0]).to.equal 'd'
+    expect(orderedIds[1]).to.equal 'z'
+
+  it 'should sort before limiting', ->
+    @collection.add id: 'd', name: 'Ddd'
+    @collection.add id: 'z', name: 'Zzz'
+    @collection.add id: 'm', name: 'Mmm'
+    @collection.add id: 'a', name: 'Aaa'
+
+    view = new lists.ListView @collection, lists.RowView,
+      sort:   (item) -> item.get('name')
+      limit:  2
+
+    orderedIds = _.keys view.rows
+
+    expect(orderedIds).to.have.length 2
+
+    expect(orderedIds[0]).to.equal 'a'
+    expect(orderedIds[1]).to.equal 'd'
