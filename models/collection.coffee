@@ -14,11 +14,15 @@ class Collection extends Backbone.Collection
   syncTo: (otherCol) ->
     @on('sync add remove', ((model, resp, opts) ->
       unless opts.from_handler
-        otherCol.fetch(update: true, from_handler: true)), this)
+        # the timeout is used to account for eventual consistency. This can be
+        # removed if we are using an ACID database.
+        setTimeout((-> otherCol.fetch(update: true, from_handler: true)), 150)
+      ), this)
 
     otherCol.on('sync add remove', ((model, resp, opts) =>
       unless opts.from_handler
-        @fetch(update: true, from_handler: true)), this)
+        setTimeout((=> @fetch(update: true, from_handler: true)), 150)
+    ), this)
 
 
 module.exports = events.track Collection

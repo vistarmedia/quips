@@ -1,6 +1,6 @@
 test    = require '../setup'
 expect  = require('chai').expect
-_       = require 'underscore'
+sinon   = require 'sinon'
 
 Collection  = require 'models/collection'
 Model       = require 'models/model'
@@ -29,6 +29,7 @@ describe 'Collection', ->
   describe 'syncTo method', ->
 
     beforeEach ->
+      @clock = sinon.useFakeTimers()
       @mock1FetchCount = 0
       @mock2FetchCount = 0
 
@@ -43,18 +44,20 @@ describe 'Collection', ->
       @mock1 = new MockColletion1()
       @mock2 = new MockColletion2()
 
-    it 'should fetch the other collection when a model is added', (done) ->
+    afterEach ->
+      @clock.restore()
+
+    it 'should fetch the other collection when a model is added', ->
       @mock1.syncTo(@mock2)
       @mock2.add(new MockModel2())
       @mock1.add(new MockModel1())
       @mock1.add(new MockModel1())
 
-      _.defer =>
-        expect(@mock1FetchCount).to.equal 1
-        expect(@mock2FetchCount).to.equal 2
-        done()
+      @clock.tick(200)
+      expect(@mock1FetchCount).to.equal 1
+      expect(@mock2FetchCount).to.equal 2
 
-    it 'should fetch the other collection when a model is removed', (done) ->
+    it 'should fetch the other collection when a model is removed', ->
       @mock2.add(new MockModel2(id: 1))
       @mock1.add(new MockModel1(id: 2))
       @mock1.add(new MockModel1(id: 3))
@@ -62,13 +65,12 @@ describe 'Collection', ->
       @mock1.syncTo(@mock2)
       @mock2.remove([1])
       @mock1.remove([2, 3])
+      @clock.tick(200)
 
-      _.defer =>
-        expect(@mock1FetchCount).to.equal 1
-        expect(@mock2FetchCount).to.equal 2
-        done()
+      expect(@mock1FetchCount).to.equal 1
+      expect(@mock2FetchCount).to.equal 2
 
-    it 'should fetch the other collection when a model is saved', (done) ->
+    it 'should fetch the other collection when a model is saved', ->
       test.when 'PUT', '/mock1/2', ->
         status: 200
 
@@ -80,13 +82,12 @@ describe 'Collection', ->
 
       @mock1.syncTo(@mock2)
       model.save()
+      @clock.tick(200)
 
-      _.defer =>
-        expect(@mock1FetchCount).to.equal 0
-        expect(@mock2FetchCount).to.equal 1
-        done()
+      expect(@mock1FetchCount).to.equal 0
+      expect(@mock2FetchCount).to.equal 1
 
-    it 'should not fetch the other collection when a model is changed', (done) ->
+    it 'should not fetch the other collection when a model is changed', ->
       model = new MockModel1(id: 2)
 
       @mock2.add(new MockModel2(id: 1))
@@ -95,13 +96,12 @@ describe 'Collection', ->
 
       @mock1.syncTo(@mock2)
       model.set(name: 'test')
+      @clock.tick(200)
 
-      _.defer =>
-        expect(@mock1FetchCount).to.equal 0
-        expect(@mock2FetchCount).to.equal 0
-        done()
+      expect(@mock1FetchCount).to.equal 0
+      expect(@mock2FetchCount).to.equal 0
 
-    it 'should always fetch the other collection second', (done) ->
+    it 'should always fetch the other collection second', ->
       @modelSaved = false
 
       test.when 'PUT', '/mock1/2', =>
@@ -119,5 +119,4 @@ describe 'Collection', ->
       for i in [1..100]
         @modelSaved = false
         model.save()
-
-      done()
+        @clock.tick(200)
