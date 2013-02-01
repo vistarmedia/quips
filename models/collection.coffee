@@ -16,12 +16,12 @@ class Collection extends Backbone.Collection
       unless opts.from_handler
         # the timeout is used to account for eventual consistency. This can be
         # removed if we are using an ACID database.
-        setTimeout((-> otherCol.fetch(update: true, from_handler: true)), 150)
+        setTimeout((-> otherCol.fetch(update: true, from_handler: true)), 200)
       ), this)
 
     otherCol.on('sync add remove', ((model, resp, opts) =>
       unless opts.from_handler
-        setTimeout((=> @fetch(update: true, from_handler: true)), 150)
+        setTimeout((=> @fetch(update: true, from_handler: true)), 200)
     ), this)
 
 
