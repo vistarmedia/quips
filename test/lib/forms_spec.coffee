@@ -206,14 +206,21 @@ describe 'Form View', ->
           expect(ageDiv.attr('class')).to.include 'error'
           done()
 
-      it 'should add an error class when fieldClass provided', (done) ->
-        form = new TestForm(@lilBilly, fieldClass: 'field').render()
+      it 'should use opts when adding an error', (done) ->
+        form = new TestForm(@lilBilly,
+          fieldClass:     'field'
+          controlsClass:  'controls').render()
+
         form.$el.find('[name=youngerThanMark]').val('Not a bool')
         ytmField = form.$el.find('.field.younger-than-mark')
         expect(ytmField).to.not.have.class 'error'
+        expect(ytmField.find('.controls')).to.not.have.element 'ul.errors'
 
         form.save().fail =>
           expect(ytmField).to.have.class 'error'
+          expect(ytmField.find('.controls')).to.have.element 'ul.errors'
+          expect(ytmField.find('.other-container'))
+            .to.not.have.element 'ul.errors'
           done()
 
       it 'should remove errors when the problem is fixed', (done) ->

@@ -22,6 +22,9 @@ class FormView extends View
     if opts?.fieldClass?
       @fieldClass = opts.fieldClass
 
+    if opts?.controlsClass?
+      @controlsClass = opts.controlsClass
+
   save: (e) ->
     e?.preventDefault()
     local = new Deferred
@@ -70,7 +73,13 @@ class FormView extends View
   _showErrors: (errs) ->
     for name, errors of errs
       field = @$el.find("[name=#{name}]")
-      field.last().after(@errorTemplate(errors: errors))
+
+      errorTemplate = @errorTemplate(errors: errors)
+
+      if @controlsClass
+        field.closest(".#{@controlsClass}").append(errorTemplate)
+      else
+        field.last().after(errorTemplate)
 
       parent = if @fieldClass
         field.closest(".#{@fieldClass}") or field.parent()
