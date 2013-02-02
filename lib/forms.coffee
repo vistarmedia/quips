@@ -12,12 +12,15 @@ class FormView extends View
   errorTemplate: ->
     throw('Must override errorTemplate')
 
-  constructor: (@model) ->
+  constructor: (@model, opts) ->
     @deferred = new Deferred()
 
     @events or= {}
     @events['submit form'] = 'save'
-    super
+    super(@model)
+
+    if opts?.fieldClass?
+      @fieldClass = opts.fieldClass
 
   save: (e) ->
     e?.preventDefault()
@@ -66,9 +69,15 @@ class FormView extends View
 
   _showErrors: (errs) ->
     for name, errors of errs
-      @$el.find("[name=#{name}]").last()
-        .after(@errorTemplate(errors: errors))
-        .parent().addClass('error')
+      field = @$el.find("[name=#{name}]")
+      field.last().after(@errorTemplate(errors: errors))
+
+      parent = if @fieldClass
+        field.closest(".#{@fieldClass}") or field.parent()
+      else
+        field.parent()
+
+      parent.addClass('error')
 
   _enableForm: ->
     @$el.find('input').prop('disabled', false)

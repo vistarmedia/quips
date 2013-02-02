@@ -20,6 +20,7 @@ class TestForm extends forms.FormView
     someDateTime:     forms.dateTimeField
     gender:           forms.stringField
     olderThanAndrew:  forms.boolField
+    youngerThanMark:  forms.intField
 
 
 describe 'Form View', ->
@@ -31,6 +32,7 @@ describe 'Form View', ->
       age:              23
       gender:           'male'
       olderThanAndrew:  true
+      youngerThanMark:  8
       someDateTime:     '2012-02-24 12:00 PM'
 
     @lilBilly.url = '/lils/billy'
@@ -202,6 +204,16 @@ describe 'Form View', ->
           ageDiv = @form.$el.find('.age-div')
           expect(ageDiv.attr('class')).to.include 'age-div'
           expect(ageDiv.attr('class')).to.include 'error'
+          done()
+
+      it 'should add an error class when fieldClass provided', (done) ->
+        form = new TestForm(@lilBilly, fieldClass: 'field').render()
+        form.$el.find('[name=youngerThanMark]').val('Not a bool')
+        ytmField = form.$el.find('.field.younger-than-mark')
+        expect(ytmField).to.not.have.class 'error'
+
+        form.save().fail =>
+          expect(ytmField).to.have.class 'error'
           done()
 
       it 'should remove errors when the problem is fixed', (done) ->
