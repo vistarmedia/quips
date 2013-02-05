@@ -42,3 +42,9 @@ describe 'Format library', ->
     expect(format.boolean(true)).to.equal 'Yes'
     expect(format.boolean(false)).to.equal 'No'
     expect(format.boolean(undefined)).to.equal ' - '
+
+  it 'should format zip codes', ->
+    expect(format.zipCode(12345)).to.equal '12345'
+    expect(format.zipCode('12345-7890')).to.equal '12345-7890'
+    expect(format.zipCode('00123')).to.equal '00123'
+    expect(format.zipCode(1040)).to.equal '01040'

@@ -29,6 +29,14 @@ boolean = (value) ->
 money = (number) ->
   "$#{formatNumber(number, 2)}"
 
+zipCode = (value) ->
+  if value.toString().indexOf('-') > -1
+    # ex: 19147-1234
+    ("00000" + "#{value}".replace(/[^0-9-]/g, '')).slice(-10)
+  else
+    # ex: 19147
+    ("00000" + "#{value}".replace(/[^0-9-]/g, '')).slice(-5)
+
 number = (number) ->
   formatNumber(number, 0)
 
@@ -55,3 +63,4 @@ module.exports =
   money:      money
   number:     number
   modelNames: modelNames
+  zipCode:    zipCode
