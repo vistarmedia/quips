@@ -40,6 +40,7 @@ module.exports =
     money:      require('quips/lib/format').money
     number:     require('quips/lib/format').number
     modelNames: require('quips/lib/format').modelNames
+    zipCode:    require('quips/lib/format').zipCode
 
   # Test
   ChaiExtensions: require 'quips/test/lib/chai_extensions'
