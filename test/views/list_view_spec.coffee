@@ -150,11 +150,7 @@ describe 'ListView', ->
     collection.add id: 'model-4'
 
     view = new TableListView(collection).render()
-
     expect(view.$el.find('.row')).to.have.length 4
-    expect(view.$el.find('.row.striped')).to.have.length 2
-    expect($(view.$el.find('.row')[1])).to.have.class 'striped'
-    expect($(view.$el.find('.row')[3])).to.have.class 'striped'
 
   it 'should sort when passed a sort func', ->
     @collection.add id: 'd', name: 'Ddd'

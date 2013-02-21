@@ -95,7 +95,6 @@ class ListView extends View
     delete @rows[item.id]
 
   render: ->
-    @_setupTables()
     @populate()
     this
 

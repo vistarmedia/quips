@@ -158,6 +158,4 @@ describe 'View', ->
 
     view = new TableView().render()
     expect(view.$el.find('.row')).to.have.length 4
-    expect(view.$el.find('.row.striped')).to.have.length 2
-    expect($(view.$el.find('.row')[1])).to.have.class 'striped'
-    expect($(view.$el.find('.row')[3])).to.have.class 'striped'
+    expect(view.$el.find('.row:nth-child(odd)')).to.have.length 2

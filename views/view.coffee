@@ -77,18 +77,11 @@ class View extends Backbone.View
     else
       @html @template()
     @populate()
-    @_setupTables()
     @_focusFirst()
     this
 
   _focusFirst: ->
     _.defer(=> @$el.find('input:text').filter(':visible').first().focus())
-
-  _setupTables: ->
-    $.each @$el.find('.table-striped'), (i, table) ->
-      $(table).find('.row').each (j, row) ->
-        if j % 2 isnt 0
-          $(row).addClass('striped')
 
   _blockAvailable: ->
     $.blockUI?
