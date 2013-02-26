@@ -29,7 +29,11 @@ class DetailView extends View
 
     # Only stick if the user will have to scroll -
     # that is, only if a sibling view is larger than the current window height
-    contentHeight = Math.max($(x).height() for x in @$el.parent().siblings())
+    contentHeight = if @opts?.contentSelector?
+      $(@opts.contentSelector).height()
+    else
+      Math.max($(x).height() for x in @$el.parent().siblings())
+
     if @opts?.sticky and contentHeight > $(window).height()
       Sticky.stickify @$el,
         padding: @opts?.stickyPadding or 0
