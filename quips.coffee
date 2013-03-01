@@ -45,4 +45,4 @@ module.exports =
   # Test
   ChaiExtensions: require 'quips/test/lib/chai_extensions'
   MockHttpServer: require('quips/test/lib/mock_server').MockHttpServer
-  Combiner: require 'lib/combiner'
+  Combiner: require 'quips/lib/combiner'
