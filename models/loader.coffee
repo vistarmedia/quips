@@ -14,7 +14,7 @@ module.exports =
       collection = new collectionType
       if $.isFunction(collection.url)
         urlFunc = collection.url
-        collection.url = ->
+        collection.url = do ->
           apiRoot + urlFunc()
       else
         collection.url = apiRoot + collection.url
