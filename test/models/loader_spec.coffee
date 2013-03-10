@@ -40,6 +40,37 @@ describe 'Model Loader', ->
     load(collections, 'api-root').done ->
       done()
 
+  describe 'when loading multiple collections with url functions', ->
+
+    it "should make a request to each collection's url", (done) ->
+      collectionOneFetches = 0
+      collectionTwoFetches = 0
+
+      test.when 'GET', 'api-root/my/mock/func/url1', (req) ->
+        collectionOneFetches++
+        status: 200
+
+      test.when 'GET', 'api-root/my/mock/func/url2', (req) ->
+        collectionTwoFetches++
+        status: 200
+
+      class FuncOneCollection extends Collection
+        model: MockModel
+        url:   -> '/my/mock/func/url1'
+
+      class FuncTwoCollection extends Collection
+        model: MockModel
+        url:   -> '/my/mock/func/url2'
+
+      collections =
+        funcOne: FuncOneCollection
+        funcTwo: FuncTwoCollection
+
+      load(collections, 'api-root').done ->
+        expect(collectionOneFetches).to.equal 1
+        expect(collectionTwoFetches).to.equal 1
+        done()
+
   it 'should not fetch lazy collections', (done) ->
     fetches = 0
 
