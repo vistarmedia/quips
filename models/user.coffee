@@ -1,4 +1,4 @@
-$     = require 'jqueryify2'
+$     = require 'jqueryify'
 JSON  = require 'json2ify'
 
 

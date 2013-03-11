@@ -11,18 +11,21 @@ class Collection extends Backbone.Collection
 
   lazy: false
 
-  syncTo: (otherCol) ->
-    @on('sync add remove', ((model, resp, opts) ->
-      unless opts.from_handler
-        # the timeout is used to account for eventual consistency. This can be
-        # removed if we are using an ACID database.
-        setTimeout((-> otherCol.fetch(update: true, from_handler: true)), 300)
-      ), this)
+  # the timeout is used to account for eventual consistency. This can be removed
+  # if we are using an ACID database.
+  syncTo: (otherCol, timeout=300) ->
+    events = 'sync add remove'
 
-    otherCol.on('sync add remove', ((model, resp, opts) =>
-      unless opts.from_handler
-        setTimeout((=> @fetch(update: true, from_handler: true)), 300)
-    ), this)
+    syncThis = (model, resp, opts) ->
+      fetch = -> otherCol.fetch(update: true, from_handler: true)
+      unless opts.from_handler then setTimeout(fetch, timeout)
+
+    syncOther = (model, resp, opts) =>
+      fetch = => @fetch(update: true, from_handler: true)
+      unless opts.from_handler then setTimeout(fetch, timeout)
+
+    @on(events, syncThis, this)
+    otherCol.on(events, syncOther, this)
 
 
 module.exports = events.track Collection

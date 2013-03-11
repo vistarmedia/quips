@@ -1,6 +1,6 @@
 test    = require '../setup'
 expect  = require('chai').expect
-$       = require 'jqueryify2'
+$       = require 'jqueryify'
 _       = require 'underscore'
 
 lists = require 'views/list_view'

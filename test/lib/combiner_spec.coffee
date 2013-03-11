@@ -1,7 +1,8 @@
 test = require '../setup'
-expect = require('chai').expect
+
+expect  = require('chai').expect
 combine = require('lib/combiner').combine
-$ = require 'jqueryify2'
+$       = require 'jqueryify'
 
 describe 'Deferred combiner', ->
   beforeEach ->
@@ -25,7 +26,7 @@ describe 'Deferred combiner', ->
     d1.resolve()
     d2.resolve()
 
-  it 'should propage the first error', (done) ->
+  it 'should propagate the first error', (done) ->
     willSucceed = $.Deferred()
     willFail    = $.Deferred()
 
@@ -36,17 +37,35 @@ describe 'Deferred combiner', ->
 
     willFail.reject 'cuz'
 
-    expect(willSucceed.isRejected()).to.be.false
-    expect(willSucceed.isResolved()).to.be.false
+    expect(willSucceed.state()).to.equal 'pending'
+    expect(willFail.state()).to.equal 'rejected'
+    expect(combined.state()).to.equal 'rejected'
 
-    expect(willFail.isRejected()).to.be.true
-    expect(willFail.isResolved()).to.be.false
-
-    expect(combined.isRejected()).to.be.true
-    expect(combined.isResolved()).to.be.false
-
-    # We should be able to get results after a failure without error
     willSucceed.resolve 'gooies'
 
-    expect(willSucceed.isResolved()).to.be.true
-    expect(combined.isRejected()).to.be.true
+    expect(willSucceed.state()).to.equal 'resolved'
+    expect(willFail.state()).to.equal 'rejected'
+    expect(combined.state()).to.equal 'rejected'
+
+describe 'jQuery deferreds', ->
+  beforeEach ->
+    @state = test.create()
+
+  afterEach ->
+    @state.destroy()
+
+  it 'should notify of failures', (done) ->
+    deferred = $.Deferred()
+    promise  = deferred.promise()
+
+    promise.fail (reason) ->
+      expect(promise.state()).to.equal 'rejected'
+      expect(reason).to.equal "Ain't nobody got time for that"
+      done()
+
+    deferred.reject "Ain't nobody got time for that"
+
+  it 'should expose state', ->
+    willFail    = $.Deferred()
+    willFail.reject 'cuz'
+    expect(willFail.state()).to.equal 'rejected'

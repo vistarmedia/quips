@@ -7,7 +7,7 @@ global.document or= jsdom()
 global.window   or= global.document.createWindow()
 
 global.window.confirm  = -> true
-global.jQuery          = require 'jqueryify2'
+global.jQuery          = require 'jqueryify'
 global.jQuery.contains = -> true
 
 Backbone        = require 'backbone'

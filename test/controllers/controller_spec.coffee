@@ -1,6 +1,6 @@
 test       = require '../setup'
 expect     = require('chai').expect
-$          = require 'jqueryify2'
+$          = require 'jqueryify'
 
 Controller = require 'controllers/controller'
 View       = require 'views/view'

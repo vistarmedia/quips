@@ -1,5 +1,5 @@
 View  = require './view'
-$     = require 'jqueryify2'
+$     = require 'jqueryify'
 
 
 class NavigationView extends View

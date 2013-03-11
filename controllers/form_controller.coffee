@@ -1,5 +1,5 @@
 _         = require 'underscore'
-Deferred  = require('jqueryify2').Deferred
+Deferred  = require('jqueryify').Deferred
 
 Controller        = require './controller'
 

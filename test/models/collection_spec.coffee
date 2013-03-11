@@ -35,7 +35,7 @@ describe 'Collection', ->
 
       test.when 'GET', '/mock1/', =>
         @mock1FetchCount++
-        body: JSON.stringify([{id: 2},{id: 3}])
+        body: JSON.stringify([{id: 2}, {id: 3}])
 
       test.when 'GET', '/mock2/', =>
         @mock2FetchCount++
@@ -48,7 +48,7 @@ describe 'Collection', ->
       @clock.restore()
 
     it 'should fetch the other collection when a model is added', ->
-      @mock1.syncTo(@mock2)
+      @mock1.syncTo(@mock2, 0)
       @mock2.add(new MockModel2())
       @mock1.add(new MockModel1())
       @mock1.add(new MockModel1())
@@ -62,7 +62,7 @@ describe 'Collection', ->
       @mock1.add(new MockModel1(id: 2))
       @mock1.add(new MockModel1(id: 3))
 
-      @mock1.syncTo(@mock2)
+      @mock1.syncTo(@mock2, 0)
       @mock2.remove([1])
       @mock1.remove([2, 3])
       @clock.tick(300)
@@ -72,7 +72,7 @@ describe 'Collection', ->
 
     it 'should fetch the other collection when a model is saved', ->
       test.when 'PUT', '/mock1/2', ->
-        status: 200
+        status: 204
 
       model = new MockModel1(id: 2)
 
@@ -80,7 +80,7 @@ describe 'Collection', ->
       @mock1.add(model)
       @mock1.add(new MockModel1(id: 3))
 
-      @mock1.syncTo(@mock2)
+      @mock1.syncTo(@mock2, 0)
       model.save()
       @clock.tick(300)
 
@@ -94,7 +94,7 @@ describe 'Collection', ->
       @mock1.add(model)
       @mock1.add(new MockModel1(id: 3))
 
-      @mock1.syncTo(@mock2)
+      @mock1.syncTo(@mock2, 0)
       model.set(name: 'test')
       @clock.tick(300)
 
@@ -114,7 +114,7 @@ describe 'Collection', ->
 
       model = new MockModel1(id: 2)
       @mock1.add(model)
-      @mock1.syncTo(@mock2)
+      @mock1.syncTo(@mock2, 0)
 
       for i in [1..100]
         @modelSaved = false

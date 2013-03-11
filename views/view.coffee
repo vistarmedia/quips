@@ -1,4 +1,4 @@
-$        = require 'jqueryify2'
+$        = require 'jqueryify'
 _        = require 'underscore'
 Backbone = require 'backbone'
 
