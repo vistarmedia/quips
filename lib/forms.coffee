@@ -1,7 +1,7 @@
 require './date'
 
 _        = require 'underscore'
-jQuery   = require 'jqueryify2'
+jQuery   = require 'jqueryify'
 Deferred = jQuery.Deferred
 JSON     = require 'json2ify'
 

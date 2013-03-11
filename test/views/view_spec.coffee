@@ -2,7 +2,7 @@ test    = require '../setup'
 expect  = require('chai').expect
 
 Backbone  = require 'backbone'
-$         = require 'jqueryify2'
+$         = require 'jqueryify'
 _         = require 'underscore'
 
 View  = require 'views/view'

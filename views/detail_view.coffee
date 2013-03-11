@@ -1,6 +1,6 @@
 View    = require './view'
 Sticky  = require '../lib/sticky'
-$       = require 'jqueryify2'
+$       = require 'jqueryify'
 
 
 class DetailView extends View

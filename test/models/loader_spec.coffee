@@ -1,6 +1,6 @@
 test    = require '../setup'
 expect  = require('chai').expect
-$       = require 'jqueryify2'
+$       = require 'jqueryify'
 
 Collection  = require 'models/collection'
 Model       = require 'models/model'
@@ -20,10 +20,10 @@ describe 'Model Loader', ->
 
   it 'should handle collections with a url func', (done) ->
     test.when 'GET', 'api-root/my/mock/url', (req) ->
-      status: 200
+      status: 204
 
     test.when 'GET', 'api-root/my/mock/func/url', (req) ->
-      status: 200
+      status: 204
 
     class MockCollection extends Collection
       model: MockModel
@@ -48,11 +48,11 @@ describe 'Model Loader', ->
 
       test.when 'GET', 'api-root/my/mock/func/url1', (req) ->
         collectionOneFetches++
-        status: 200
+        status: 204
 
       test.when 'GET', 'api-root/my/mock/func/url2', (req) ->
         collectionTwoFetches++
-        status: 200
+        status: 204
 
       class FuncOneCollection extends Collection
         model: MockModel
