@@ -1,5 +1,5 @@
 Backbone = require 'backbone'
-$        = require 'jqueryify2'
+$        = require 'jqueryify'
 
 events = require '../lib/events'
 

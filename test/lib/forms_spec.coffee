@@ -2,7 +2,7 @@ require 'lib/date'
 
 test    = require '../setup'
 expect  = require('chai').expect
-$       = require 'jqueryify2'
+$       = require 'jqueryify'
 JSON    = require 'json2ify'
 
 Model = require 'models/model'
@@ -67,7 +67,18 @@ describe 'Form View', ->
   it 'should populate a select field', ->
     @lilBilly.set(gender: 'male')
     form = new TestForm(@lilBilly).render()
-    expect(form.$el.find('select[name=gender] option[selected]')).to.have.val 'male'
+    expect(form.$el.find('select[name=gender]')).to.have.val 'male'
+
+  it 'should submit the value of a select view', (done) ->
+    test.when 'POST', '/lils/billy', (req) ->
+      postData = $.parseJSON(req.requestText)
+      expect(postData.gender).to.equal 'male'
+      done()
+
+    @lilBilly.set(gender: 'male')
+    form = new TestForm(@lilBilly).render()
+    form.$el.find('form').submit()
+
 
   describe 'when getting an update', ->
 
@@ -125,7 +136,7 @@ describe 'Form View', ->
 
     it 'should notify instance deferred on success', (done) ->
       test.when 'POST', '/lils/billy', (req) ->
-        status: 200
+        status: 204
 
       @form.deferred.progress ->
         done()
@@ -134,7 +145,7 @@ describe 'Form View', ->
 
     it 'should fire a saved event on success', (done) ->
       test.when 'POST', '/lils/billy', (req) ->
-        status: 200
+        status: 204
 
       @form.on('saved', (->
         done()), @form)

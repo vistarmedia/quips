@@ -1,4 +1,4 @@
-Deferred = require('jqueryify2').Deferred
+Deferred = require('jqueryify').Deferred
 Backbone = require 'backbone'
 
 Controller = require './controller'
