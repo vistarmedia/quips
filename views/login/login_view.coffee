@@ -1,4 +1,5 @@
 View = require '../view'
+$    = require 'jqueryify'
 
 
 class LoginView extends View
@@ -26,7 +27,7 @@ class LoginView extends View
   _login: (e) ->
     e?.preventDefault()
     credentials =
-      email:    @$email.val()
+      email:    $.trim(@$email.val())
       password: @$password.val()
       opts:     @options
 

@@ -13,7 +13,7 @@ class Collection extends Backbone.Collection
 
   # the timeout is used to account for eventual consistency. This can be removed
   # if we are using an ACID database.
-  syncTo: (otherCol, timeout=300) ->
+  syncTo: (otherCol, timeout=500) ->
     events = 'sync add remove'
 
     syncThis = (model, resp, opts) ->

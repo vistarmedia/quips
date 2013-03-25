@@ -53,7 +53,7 @@ describe 'Collection', ->
       @mock1.add(new MockModel1())
       @mock1.add(new MockModel1())
 
-      @clock.tick(300)
+      @clock.tick(500)
       expect(@mock1FetchCount).to.equal 1
       expect(@mock2FetchCount).to.equal 2
 
@@ -65,7 +65,7 @@ describe 'Collection', ->
       @mock1.syncTo(@mock2, 0)
       @mock2.remove([1])
       @mock1.remove([2, 3])
-      @clock.tick(300)
+      @clock.tick(500)
 
       expect(@mock1FetchCount).to.equal 1
       expect(@mock2FetchCount).to.equal 2
@@ -82,7 +82,7 @@ describe 'Collection', ->
 
       @mock1.syncTo(@mock2, 0)
       model.save()
-      @clock.tick(300)
+      @clock.tick(500)
 
       expect(@mock1FetchCount).to.equal 0
       expect(@mock2FetchCount).to.equal 1
@@ -96,7 +96,7 @@ describe 'Collection', ->
 
       @mock1.syncTo(@mock2, 0)
       model.set(name: 'test')
-      @clock.tick(300)
+      @clock.tick(500)
 
       expect(@mock1FetchCount).to.equal 0
       expect(@mock2FetchCount).to.equal 0
@@ -119,4 +119,4 @@ describe 'Collection', ->
       for i in [1..100]
         @modelSaved = false
         model.save()
-        @clock.tick(300)
+        @clock.tick(500)

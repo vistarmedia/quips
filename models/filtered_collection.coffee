@@ -14,6 +14,7 @@ class FilteredCollection extends Collection
     @collection.on('add',     @addUnfiltered, this)
     @collection.on('remove',  @remove, this)
     @collection.on('reset',   @collectionReset, this)
+    @collection.on('sync', (-> @trigger('sync')), this)
     @reset(@collection.models)
 
   collectionReset: (c) ->
