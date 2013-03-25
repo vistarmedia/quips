@@ -42,10 +42,10 @@ class ListView extends View
     super
 
     @rows = {}
-    @items.on 'add',    @_addItem,    this
-    @items.on 'remove', @_removeItem, this
-    @items.on 'reset',  @_reset,      this
-    @items.on 'change', @render,      this
+    @items.on 'add',         @_addItem,    this
+    @items.on 'remove',      @_removeItem, this
+    @items.on 'reset',       @_reset,      this
+    @items.on 'change sync', @render,      this
 
     if @layout? then @append(@layout())
 
