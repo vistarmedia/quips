@@ -1,6 +1,6 @@
 {
   "dependencies": [
-    "jqueryify2",
+    "jqueryify",
     "json2ify",
     "underscore",
     "backbone"
