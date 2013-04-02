@@ -145,7 +145,8 @@ intField =
 
 moneyField =
   get: (el, defaultValue) ->
-    money = parseFloat(el.val())
+    stripped = el.val().replace(',', '')
+    money = parseFloat(stripped)
     if _.isNaN(money)
       return defaultValue if defaultValue?
       throw TypeError('Invalid Number')

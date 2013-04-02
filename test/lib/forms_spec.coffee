@@ -341,6 +341,10 @@ describe 'Money Field', ->
       @el.val('THIS IS NOT VALID%&%& 123.42 @&%')
       expect(forms.moneyField.get(@el, 0.00)).to.equal 0.00
 
+    it 'should ignore commas', ->
+      @el.val('500,000')
+      expect(forms.moneyField.get(@el)).to.equal '500000.00'
+
 
 describe 'Date Time Field', ->
   beforeEach ->
