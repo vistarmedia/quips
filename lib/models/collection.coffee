@@ -11,18 +11,16 @@ class Collection extends Backbone.Collection
 
   lazy: false
 
-  # the timeout is used to account for eventual consistency. This can be removed
-  # if we are using an ACID database.
-  syncTo: (otherCol, timeout=500) ->
+  syncTo: (otherCol) ->
     events = 'sync add remove'
 
     syncThis = (model, resp, opts) ->
-      fetch = -> otherCol.fetch(update: true, from_handler: true)
-      unless opts.from_handler then setTimeout(fetch, timeout)
+      unless opts.from_handler
+        otherCol.fetch(update: true, from_handler: true)
 
     syncOther = (model, resp, opts) =>
-      fetch = => @fetch(update: true, from_handler: true)
-      unless opts.from_handler then setTimeout(fetch, timeout)
+      unless opts.from_handler
+        @fetch(update: true, from_handler: true)
 
     @on(events, syncThis, this)
     otherCol.on(events, syncOther, this)

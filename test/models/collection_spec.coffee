@@ -1,6 +1,6 @@
 test    = require '../setup'
 expect  = require('chai').expect
-sinon   = require 'sinon'
+_       = require 'underscore'
 
 Collection  = require 'models/collection'
 Model       = require 'models/model'
@@ -29,7 +29,6 @@ describe 'Collection', ->
   describe 'syncTo method', ->
 
     beforeEach ->
-      @clock = sinon.useFakeTimers()
       @mock1FetchCount = 0
       @mock2FetchCount = 0
 
@@ -44,16 +43,12 @@ describe 'Collection', ->
       @mock1 = new MockColletion1()
       @mock2 = new MockColletion2()
 
-    afterEach ->
-      @clock.restore()
-
     it 'should fetch the other collection when a model is added', ->
       @mock1.syncTo(@mock2, 0)
       @mock2.add(new MockModel2())
       @mock1.add(new MockModel1())
       @mock1.add(new MockModel1())
 
-      @clock.tick(500)
       expect(@mock1FetchCount).to.equal 1
       expect(@mock2FetchCount).to.equal 2
 
@@ -65,12 +60,11 @@ describe 'Collection', ->
       @mock1.syncTo(@mock2, 0)
       @mock2.remove([1])
       @mock1.remove([2, 3])
-      @clock.tick(500)
 
       expect(@mock1FetchCount).to.equal 1
       expect(@mock2FetchCount).to.equal 2
 
-    it 'should fetch the other collection when a model is saved', ->
+    it 'should fetch the other collection when a model is saved', (done) ->
       test.when 'PUT', '/mock1/2', ->
         status: 204
 
@@ -82,10 +76,11 @@ describe 'Collection', ->
 
       @mock1.syncTo(@mock2, 0)
       model.save()
-      @clock.tick(500)
 
-      expect(@mock1FetchCount).to.equal 0
-      expect(@mock2FetchCount).to.equal 1
+      _.defer =>
+        expect(@mock1FetchCount).to.equal 0
+        expect(@mock2FetchCount).to.equal 1
+        done()
 
     it 'should not fetch the other collection when a model is changed', ->
       model = new MockModel1(id: 2)
@@ -96,7 +91,6 @@ describe 'Collection', ->
 
       @mock1.syncTo(@mock2, 0)
       model.set(name: 'test')
-      @clock.tick(500)
 
       expect(@mock1FetchCount).to.equal 0
       expect(@mock2FetchCount).to.equal 0
@@ -119,4 +113,3 @@ describe 'Collection', ->
       for i in [1..100]
         @modelSaved = false
         model.save()
-        @clock.tick(500)
