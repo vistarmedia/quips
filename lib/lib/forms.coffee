@@ -145,7 +145,7 @@ intField =
 
 moneyField =
   get: (el, defaultValue) ->
-    stripped = el.val().replace(',', '')
+    stripped = el.val().replace(/\,/g, '')
     money = parseFloat(stripped)
     if _.isNaN(money)
       return defaultValue if defaultValue?

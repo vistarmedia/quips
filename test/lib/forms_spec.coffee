@@ -342,8 +342,8 @@ describe 'Money Field', ->
       expect(forms.moneyField.get(@el, 0.00)).to.equal 0.00
 
     it 'should ignore commas', ->
-      @el.val('500,000')
-      expect(forms.moneyField.get(@el)).to.equal '500000.00'
+      @el.val('5,000,000')
+      expect(forms.moneyField.get(@el)).to.equal '5000000.00'
 
 
 describe 'Date Time Field', ->
