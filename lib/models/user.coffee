@@ -36,8 +36,15 @@ class User
       url:          authUrl
       data:         JSON.stringify(data)
 
-    resp.pipe(User.fromResponse, -> 'Invalid Login')
+    resp.pipe(User.fromResponse, @parseFailureMessage)
       .done((user) -> User.current = user)
+
+  # Accept a custom failure message
+  @parseFailureMessage: (resp) ->
+    if resp.responseText
+      JSON.parse(resp.responseText).password
+    else
+      'Invalid Login'
 
   # Ping /session/ to see if we're already logged in. This will retern a deferrand
   # who's `done` will be handed the current user, and who's `fail` will have the

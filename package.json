@@ -1,6 +1,6 @@
 {
   "name": "quips",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "dependencies": {
     "coffee-script":    "1.6.x",
     "jqueryify":        "1.9.1",
