@@ -36,7 +36,7 @@ class User
       url:          authUrl
       data:         JSON.stringify(data)
 
-    resp.pipe(User.fromResponse, @parseFailureMessage)
+    resp.pipe(User.fromResponse, User.parseFailureMessage)
       .done((user) -> User.current = user)
 
   # Accept a custom failure message
