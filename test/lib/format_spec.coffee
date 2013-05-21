@@ -38,6 +38,13 @@ describe 'Format library', ->
     expect(format.number(NaN)).to.equal '0'
     expect(format.number(0.87)).to.equal '1'
 
+  it 'should format decimal numbers', ->
+    expect(format.decimalNumber(3852.378)).to.equal '3,852.38'
+    expect(format.decimalNumber(0)).to.equal '0.00'
+    expect(format.decimalNumber()).to.equal '0.00'
+    expect(format.decimalNumber(NaN)).to.equal '0.00'
+    expect(format.decimalNumber(0.873)).to.equal '0.87'
+
   it 'should format a boolean', ->
     expect(format.boolean(true)).to.equal 'Yes'
     expect(format.boolean(false)).to.equal 'No'

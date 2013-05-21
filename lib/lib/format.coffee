@@ -40,6 +40,9 @@ zipCode = (value) ->
 number = (number) ->
   formatNumber(number, 0)
 
+decimalNumber = (number) ->
+  formatNumber(number, 2)
+
 formatNumber = (number, places) ->
   s = if number < 0 then "-" else ""
   i = parseInt(number = Math.abs(+number || 0).toFixed(places)) + ""
@@ -57,10 +60,11 @@ modelNames = (models) ->
     "#{names[0...names.length-1].join(', ')}, and #{names[names.length-1]}"
 
 module.exports =
-  date:       date
-  dateTime:   dateTime
-  boolean:    boolean
-  money:      money
-  number:     number
-  modelNames: modelNames
-  zipCode:    zipCode
+  boolean:        boolean
+  date:           date
+  dateTime:       dateTime
+  decimalNumber:  decimalNumber
+  money:          money
+  number:         number
+  modelNames:     modelNames
+  zipCode:        zipCode
