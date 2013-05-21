@@ -33,14 +33,7 @@ module.exports =
   dateTimeField:  require('./lib/lib/forms').dateTimeField
 
   # Formatters
-  formatters:
-    date:       require('./lib/lib/format').date
-    dateTime:   require('./lib/lib/format').dateTime
-    boolean:    require('./lib/lib/format').boolean
-    money:      require('./lib/lib/format').money
-    number:     require('./lib/lib/format').number
-    modelNames: require('./lib/lib/format').modelNames
-    zipCode:    require('./lib/lib/format').zipCode
+  formatters:   require './lib/lib/format'
 
   # Test
   ChaiExtensions: require './test/lib/chai_extensions'
