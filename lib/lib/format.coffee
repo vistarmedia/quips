@@ -29,6 +29,9 @@ boolean = (value) ->
 money = (number) ->
   "$#{formatNumber(number, 2)}"
 
+dollars = (number) ->
+  "$#{formatNumber(number, 0)}"
+
 zipCode = (value) ->
   if value.toString().indexOf('-') > -1
     # ex: 19147-1234
@@ -64,6 +67,7 @@ module.exports =
   date:           date
   dateTime:       dateTime
   decimalNumber:  decimalNumber
+  dollars:        dollars
   money:          money
   number:         number
   modelNames:     modelNames

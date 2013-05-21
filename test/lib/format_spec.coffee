@@ -31,6 +31,14 @@ describe 'Format library', ->
     expect(format.money(NaN)).to.equal '$0.00'
     expect(format.money(0.87)).to.equal '$0.87'
 
+  it 'should format dollars', ->
+    expect(format.dollars(10)).to.equal '$10'
+    expect(format.dollars(0)).to.equal '$0'
+    expect(format.dollars(123.1234567890)).to.equal '$123'
+    expect(format.dollars()).to.equal '$0'
+    expect(format.dollars(NaN)).to.equal '$0'
+    expect(format.dollars(0.87)).to.equal '$1'
+
   it 'should format numbers', ->
     expect(format.number(352378)).to.equal '352,378'
     expect(format.number(0)).to.equal '0'
