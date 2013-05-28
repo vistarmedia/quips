@@ -41,6 +41,7 @@ describe 'Format library', ->
 
   it 'should format numbers', ->
     expect(format.number(352378)).to.equal '352,378'
+    expect(format.number(-352378)).to.equal '-352,378'
     expect(format.number(0)).to.equal '0'
     expect(format.number()).to.equal '0'
     expect(format.number(NaN)).to.equal '0'
@@ -63,3 +64,9 @@ describe 'Format library', ->
     expect(format.zipCode('12345-7890')).to.equal '12345-7890'
     expect(format.zipCode('00123')).to.equal '00123'
     expect(format.zipCode(1040)).to.equal '01040'
+
+  it 'should commafy a number', ->
+    expect(format.commafy(12345678)).to.equal '12,345,678'
+    expect(format.commafy(1234)).to.equal '1,234'
+    expect(format.commafy(1234.56)).to.equal '1,234.56'
+    expect(format.commafy(1234.56424)).to.equal '1,234.56424'

@@ -328,6 +328,11 @@ describe 'Money Field', ->
       forms.moneyField.set(@el, '')
       expect(@el.val()).to.equal('0.00')
 
+    it 'should commafy value', ->
+      @el.val('')
+      forms.moneyField.set(@el, '12345678.38')
+      expect(@el.val()).to.equal('12,345,678.38')
+
   describe 'when getting a value', ->
     it 'should have 2 places', ->
       @el.val('123.456')

@@ -1,6 +1,10 @@
 require './date'
 
 
+commafy = (value) ->
+  value.toString().replace /(^|[^\w.])(\d{4,})/g, ($0, $1, $2) ->
+    $1 + $2.replace(/\d(?=(?:\d\d\d)+(?!\d))/g, "$&,")
+
 date = (dateString) ->
   date = new Date(dateString)
   formattedDate = date.toString('M/d/yyyy')
@@ -8,7 +12,6 @@ date = (dateString) ->
     formattedDate
   else
     ''
-
 dateTime = (dateTimeString) ->
   date = new Date(dateTimeString)
   formattedDate = date.toString('M/d/yyyy h:mm tt')
@@ -16,7 +19,6 @@ dateTime = (dateTimeString) ->
     formattedDate
   else
     ''
-
 boolean = (value) ->
   if not value?
     ' - '
@@ -24,7 +26,6 @@ boolean = (value) ->
     'Yes'
   else
     'No'
-
 
 money = (number) ->
   "$#{formatNumber(number, 2)}"
@@ -47,13 +48,7 @@ decimalNumber = (number) ->
   formatNumber(number, 2)
 
 formatNumber = (number, places) ->
-  s = if number < 0 then "-" else ""
-  i = parseInt(number = Math.abs(+number || 0).toFixed(places)) + ""
-  j = if (j = i.length) > 3 then j % 3 else 0
-
-  return s + (if j then i.substr(0, j) + ',' else "") +
-           i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + ',') +
-           (if places then "." + Math.abs(number - i).toFixed(places).slice(2) else "")
+  commafy((number or 0).toFixed(places))
 
 modelNames = (models) ->
   names = (model.get('name') for model in models)
@@ -62,8 +57,10 @@ modelNames = (models) ->
   else
     "#{names[0...names.length-1].join(', ')}, and #{names[names.length-1]}"
 
+
 module.exports =
   boolean:        boolean
+  commafy:        commafy
   date:           date
   dateTime:       dateTime
   decimalNumber:  decimalNumber

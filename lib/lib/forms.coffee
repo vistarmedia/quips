@@ -5,7 +5,8 @@ jQuery   = require 'jqueryify'
 Deferred = jQuery.Deferred
 JSON     = require 'json2ify'
 
-View = require '../views/view'
+Format  = require './format'
+View    = require '../views/view'
 
 
 class FormView extends View
@@ -156,7 +157,7 @@ moneyField =
     moneyFloat = parseFloat(value)
     if _.isNaN(moneyFloat)
       moneyFloat = 0
-    el.val(moneyFloat.toFixed(2))
+    el.val(Format.commafy(moneyFloat.toFixed(2)))
 
 
 boolField =
