@@ -48,7 +48,7 @@ decimalNumber = (number) ->
   formatNumber(number, 2)
 
 formatNumber = (number, places) ->
-  commafy((number or 0).toFixed(places))
+  commafy((parseFloat(number) or 0).toFixed(places))
 
 modelNames = (models) ->
   names = (model.get('name') for model in models)

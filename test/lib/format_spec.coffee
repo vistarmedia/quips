@@ -46,6 +46,7 @@ describe 'Format library', ->
     expect(format.number()).to.equal '0'
     expect(format.number(NaN)).to.equal '0'
     expect(format.number(0.87)).to.equal '1'
+    expect(format.number('1234')).to.equal '1,234'
 
   it 'should format decimal numbers', ->
     expect(format.decimalNumber(3852.378)).to.equal '3,852.38'
