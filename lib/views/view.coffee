@@ -31,6 +31,7 @@ class View extends Backbone.View
       return @$el.html()
 
     @$el.empty().append arguments...
+    @delegateEvents()
     this
 
   remove: ->
