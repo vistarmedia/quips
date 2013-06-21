@@ -286,12 +286,17 @@ describe 'Int Field', ->
     it 'should set a zero when NaN', ->
       @el.val('')
       forms.intField.set(@el, NaN)
-      expect(@el.val()).to.equal('0')
+      expect(@el.val()).to.equal '0'
 
     it 'should set a zero when no value', ->
       @el.val('')
       forms.intField.set(@el, '')
-      expect(@el.val()).to.equal('0')
+      expect(@el.val()).to.equal '0'
+
+    it 'should commafy the value', ->
+      @el.val('')
+      forms.intField.set(@el, 1234567)
+      expect(@el.val()).to.equal '1,234,567'
 
   describe 'when getting a value', ->
     it 'should error when invalid', ->
@@ -302,6 +307,9 @@ describe 'Int Field', ->
       @el.val('THIS IS NOT VALID%&%& 122 @&%')
       expect(forms.intField.get(@el, 2)).to.equal 2
 
+    it 'should accept a value with commas', ->
+      @el.val('1,234')
+      expect(forms.intField.get(@el)).to.equal 1234
 
 describe 'Money Field', ->
 

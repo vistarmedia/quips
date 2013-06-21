@@ -131,7 +131,8 @@ stringField =
 
 intField =
   get: (el, defaultValue) ->
-    i = parseInt(el.val(), 10)
+    stripped = el.val().replace(/\,/g, '')
+    i = parseInt(stripped, 10)
     if _.isNaN(i)
       return defaultValue if defaultValue?
       throw TypeError('Invalid Number')
@@ -141,7 +142,7 @@ intField =
     int = parseInt(value, 10)
     if _.isNaN(int)
       int = 0
-    el.val(int)
+    el.val(Format.commafy(int))
 
 
 moneyField =
