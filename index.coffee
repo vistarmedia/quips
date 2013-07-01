@@ -7,6 +7,7 @@ module.exports =
   # Collections
   Collection:         require './lib/models/collection'
   FilteredCollection: require './lib/models/filtered_collection'
+  PageableCollection: require './lib/models/pageable_collection'
 
   # Views
   View:           require './lib/views/view'
