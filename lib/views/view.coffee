@@ -91,7 +91,9 @@ class View extends Backbone.View
   _mergeEvents: ->
     constructor = @constructor
     while constructor?
-      @events = _.defaults(@events, _.result(constructor.__super__, 'events'))
+      @events = _.defaults(
+        _.result(this, 'events'),
+        _.result(constructor.__super__, 'events'))
       constructor = constructor?.__super__?.constructor
 
 

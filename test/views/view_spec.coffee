@@ -167,21 +167,25 @@ describe 'View', ->
         <a></a>
         <span></span>
       """
-      events:
+      events: ->
         'click a': -> @string += 'Test'
 
       string: ""
 
+    # Test no events object
     class FirstChildView extends ParentView
-      events: ->
-        'click div': -> @string += ' extends'
 
     class SecondChildView extends FirstChildView
       events:
-        'click span': -> @string += ' events'
+        'click span': -> @string += ' extends'
 
-    view = new SecondChildView().render()
+    # Test events prop is a function
+    class ThirdChildView extends SecondChildView
+      events: ->
+        'click div': -> @string += ' events'
+
+    view = new ThirdChildView().render()
     view.$el.find('a').click()
-    view.$el.find('div').click()
     view.$el.find('span').click()
+    view.$el.find('div').click()
     expect(view.string).to.equal 'Test extends events'
