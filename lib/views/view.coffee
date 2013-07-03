@@ -7,6 +7,7 @@ events = require '../lib/events'
 
 class View extends Backbone.View
   constructor: ->
+    @_mergeEvents()
     super
 
     if navigator?
@@ -86,6 +87,12 @@ class View extends Backbone.View
 
   _blockAvailable: ->
     $.blockUI?
+
+  _mergeEvents: ->
+    constructor = @constructor
+    while constructor?
+      @events = _.defaults(@events, _.result(constructor.__super__, 'events'))
+      constructor = constructor?.__super__?.constructor
 
 
 module.exports = events.track View

@@ -159,3 +159,29 @@ describe 'View', ->
     view = new TableView().render()
     expect(view.$el.find('.row')).to.have.length 4
     expect(view.$el.find('.row:nth-child(odd)')).to.have.length 2
+
+  it 'should be able to extend a parent views events', ->
+    class ParentView extends View
+      template: -> """
+        <div></div>
+        <a></a>
+        <span></span>
+      """
+      events:
+        'click a': -> @string += 'Test'
+
+      string: ""
+
+    class FirstChildView extends ParentView
+      events: ->
+        'click div': -> @string += ' extends'
+
+    class SecondChildView extends FirstChildView
+      events:
+        'click span': -> @string += ' events'
+
+    view = new SecondChildView().render()
+    view.$el.find('a').click()
+    view.$el.find('div').click()
+    view.$el.find('span').click()
+    expect(view.string).to.equal 'Test extends events'
