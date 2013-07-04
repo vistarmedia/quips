@@ -15,7 +15,7 @@ validateAndGetTotalPages = (state, totalRecords) ->
   if state.pageSize < 1
     throw new RangeError('pageSize must be >= 1')
 
-  totalPages = Math.ceil(totalRecords / state.pageSize)
+  totalPages = Math.max(Math.ceil(totalRecords / state.pageSize), 1)
   if state.currentPage < 1 or (
     totalPages > 0 and state.currentPage > totalPages)
     throw new RangeError(

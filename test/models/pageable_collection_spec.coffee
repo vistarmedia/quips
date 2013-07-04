@@ -150,6 +150,11 @@ describe 'Pageable Collection', ->
       expect(@pageableCollection.models[0].get('name')).to.equal 'X'
       expect(@pageableCollection.models[1].get('name')).to.equal 'Y'
 
+      @collection.reset([])
+      expect(@pageableCollection.getNumberOfPages()).to.equal 1
+      expect(@pageableCollection.getCurrentPageNumber()).to.equal 1
+      expect(@pageableCollection.length).to.equal 0
+
     it 'should handler sort events to the parent collection', ->
       @collection.comparator = undefined
       expect(@pageableCollection.models[0].get('name')).to.equal 'A'
