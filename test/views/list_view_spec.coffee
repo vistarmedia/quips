@@ -92,20 +92,6 @@ describe 'ListView', ->
     expect(listView.$el.find('#model-1.hidden')).to.have.length 0
     expect(listView.$el.find('#model-2.hidden')).to.have.length 1
 
-  it 'should order models by some function', ->
-    model1 = new MockModel(id: 'model-1', name: 'BBB Model')
-    model2 = new MockModel(id: 'model-2', name: 'AAA Model')
-    @collection.add(m) for m in [model1, model2]
-    listView = new lists.ListView(@collection).render()
-
-    firstId = -> listView.$el.children().first().attr('id')
-
-    listView.sortBy (net) -> net.get('name')
-    expect(firstId()).to.equal 'model-2'
-
-    listView.sortBy (net) -> net.id
-    expect(firstId()).to.equal 'model-1'
-
   it 'should use the provided row class', ->
     class MockRowView extends lists.RowView
       render: -> this
@@ -152,55 +138,120 @@ describe 'ListView', ->
     view = new TableListView(collection).render()
     expect(view.$el.find('.row')).to.have.length 4
 
-  it 'should sort when passed a sort func', ->
-    @collection.add id: 'd', name: 'Ddd'
-    @collection.add id: 'z', name: 'Zzz'
-    @collection.add id: 'm', name: 'Mmm'
-    @collection.add id: 'a', name: 'Aaa'
+  it 'should keep the selected item when reset', ->
+    modelA = @collection.create id: 'a'
+    modelB = @collection.create id: 'b'
+    modelC = @collection.create id: 'c'
+    @collection.add([modelA, modelB, modelC])
 
-    expect(@collection.models[0].get('name')).to.equal 'Ddd'
-    expect(@collection.models[1].get('name')).to.equal 'Zzz'
-    expect(@collection.models[2].get('name')).to.equal 'Mmm'
-    expect(@collection.models[3].get('name')).to.equal 'Aaa'
+    view = new lists.ListView @collection, lists.RowView
+    view.render()
+    view.rows['b'].$el.click()
+    expect($(view.listEl()).find('.selected').length).to.equal 1
+    expect(view.rows['b'].$el).class 'selected'
 
-    view = new lists.ListView @collection, lists.RowView,
-      sort: (item) -> item.get('name')
+    @collection.reset([modelA, modelB])
 
-    orderedIds = _.keys view.rows
+    expect($(view.listEl()).find('.selected').length).to.equal 1
+    expect(view.rows['b'].$el).class 'selected'
 
-    expect(orderedIds[0]).to.equal 'a'
-    expect(orderedIds[1]).to.equal 'd'
-    expect(orderedIds[2]).to.equal 'm'
-    expect(orderedIds[3]).to.equal 'z'
+    @collection.reset([modelA])
+    expect($(view.listEl()).find('.selected').length).to.equal 0
 
-  it 'should limit when passed a limit', ->
-    @collection.add id: 'd', name: 'Ddd'
-    @collection.add id: 'z', name: 'Zzz'
-    @collection.add id: 'm', name: 'Mmm'
-    @collection.add id: 'a', name: 'Aaa'
 
-    view = new lists.ListView @collection, lists.RowView, limit: 2
+  describe 'sorting', ->
 
-    orderedIds = _.keys view.rows
+    beforeEach ->
+      class MockRowView extends lists.RowView
+        tagName: 'tr'
+        template: (model) -> "<td>#{model.name}</td>"
+        constructor: (@model) ->
+          super(@model, @template)
 
-    expect(orderedIds).to.have.length 2
+      class MockListView extends lists.ListView
+        comparators:
+          name: (model) -> model.get('name')?.toLowerCase()
 
-    expect(orderedIds[0]).to.equal 'd'
-    expect(orderedIds[1]).to.equal 'z'
+        layout: -> """
+          <table>
+            <thead>
+              <th class="sort" data-comparator="name" id="nameHeader"></th>
+            </thead>
+            <tbody></tbody>
+          </table>
+        """
 
-  it 'should sort before limiting', ->
-    @collection.add id: 'd', name: 'Ddd'
-    @collection.add id: 'z', name: 'Zzz'
-    @collection.add id: 'm', name: 'Mmm'
-    @collection.add id: 'a', name: 'Aaa'
+        listEl: -> @$el.find('tbody')
 
-    view = new lists.ListView @collection, lists.RowView,
-      sort:   (item) -> item.get('name')
-      limit:  2
+      @collection.add
+        id: '1'
+        name: 'AA model'
 
-    orderedIds = _.keys view.rows
+      @collection.add
+        id: '2'
+        name: 'CC model'
 
-    expect(orderedIds).to.have.length 2
+      @collection.add
+        id: '3'
+        name: 'bb model'
 
-    expect(orderedIds[0]).to.equal 'a'
-    expect(orderedIds[1]).to.equal 'd'
+      @mlv = new MockListView(@collection, MockRowView).render()
+
+    it 'should sort ASC/DESC based on the comparators', ->
+      rows = @mlv.listEl().find('tr')
+      expect(rows.length).to.equal 3
+      expect($(rows[0]).find('td').html()).to.equal 'AA model'
+      expect($(rows[1]).find('td').html()).to.equal 'CC model'
+      expect($(rows[2]).find('td').html()).to.equal 'bb model'
+
+      @mlv.$el.find('#nameHeader').click()
+      rows = @mlv.listEl().find('tr')
+      expect(rows.length).to.equal 3
+      expect($(rows[0]).find('td').html()).to.equal 'AA model'
+      expect($(rows[1]).find('td').html()).to.equal 'bb model'
+      expect($(rows[2]).find('td').html()).to.equal 'CC model'
+
+      @mlv.$el.find('#nameHeader').click()
+      rows = @mlv.listEl().find('tr')
+      expect(rows.length).to.equal 3
+      expect($(rows[0]).find('td').html()).to.equal 'CC model'
+      expect($(rows[1]).find('td').html()).to.equal 'bb model'
+      expect($(rows[2]).find('td').html()).to.equal 'AA model'
+
+    it 'should stay sorted when adding/removing', ->
+      @mlv.sortBy('name', 'DESC')
+      rows = @mlv.listEl().find('tr')
+      expect(rows.length).to.equal 3
+      expect($(rows[0]).find('td').html()).to.equal 'CC model'
+      expect($(rows[1]).find('td').html()).to.equal 'bb model'
+      expect($(rows[2]).find('td').html()).to.equal 'AA model'
+
+      @collection.add
+        id: '4'
+        name: 'ab model'
+
+      rows = @mlv.listEl().find('tr')
+      expect(rows.length).to.equal 4
+      expect($(rows[0]).find('td').html()).to.equal 'CC model'
+      expect($(rows[1]).find('td').html()).to.equal 'bb model'
+      expect($(rows[2]).find('td').html()).to.equal 'ab model'
+      expect($(rows[3]).find('td').html()).to.equal 'AA model'
+
+      @collection.remove '3'
+      rows = @mlv.listEl().find('tr')
+      expect(rows.length).to.equal 3
+      expect($(rows[0]).find('td').html()).to.equal 'CC model'
+      expect($(rows[1]).find('td').html()).to.equal 'ab model'
+      expect($(rows[2]).find('td').html()).to.equal 'AA model'
+
+    it 'should keep the correct row highlighted', ->
+      @mlv.sortBy('name', 'DESC')
+      @mlv.rows['2'].highlight()
+      rows = @mlv.listEl().find('tr')
+      expect($(rows[0]).find('td').html()).to.equal 'CC model'
+      expect($(rows[0])).class 'selected'
+
+      @mlv.sortBy('name', 'ASC')
+      rows = @mlv.listEl().find('tr')
+      expect($(rows[2]).find('td').html()).to.equal 'CC model'
+      expect($(rows[2])).class 'selected'

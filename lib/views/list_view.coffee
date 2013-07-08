@@ -1,4 +1,4 @@
-_ = require 'underscore'
+$ = require 'jqueryify'
 
 View = require './view'
 
@@ -33,66 +33,81 @@ class ListView extends View
 
   layout: null
 
+  comparators: {}
+
   listEl: ->
     @$el
 
   template: ->
 
-  constructor: (@items, @rowClass, opts) ->
+  events:
+    'click .sort': '_sortClickHandler'
+
+  constructor: (@items, @rowClass) ->
     super
 
+    @sortState = {}
     @rows = {}
-    @items.on 'add',         @_addItem,    this
-    @items.on 'remove',      @_removeItem, this
-    @items.on 'reset',       @_reset,      this
-    @items.on 'change sync', @render,      this
+    @items.on 'add',         @_addItem,     this
+    @items.on 'remove',      @_removeItem,  this
+    @items.on 'reset',       @_reset,       this
+    @items.on 'sort',        @_sortHandler, this
+    @items.on 'change sync', @render,       this
 
     if @layout? then @append(@layout())
-
-    if opts?.sort?
-      @items.comparator = opts.sort
-      @items.sort()
-
-    if opts?.limit?
-      @limit = opts.limit
-
     @_reset()
 
   select: (item) ->
     @rows[item.id]?.highlight()
+    @selectedItem = item
 
   filterBy: (filter) ->
     for id, rowView of @rows
       if filter(rowView.model) then rowView.show() else rowView.hide()
 
-  sortBy: (sort) ->
-    models = _.sortBy @items.models, (id) => sort(@items.get(id))
-
-    cursor = null
-    for model in models
-      el = @rows[model.id].$el
-      cursor?.after el
-      cursor = el
-
   clearSelection: ->
     @$el.find('.selected').removeClass('selected')
+    @selectedItem = null
+
+  sortBy: (key, direction) ->
+    unless direction is 'ASC' or direction is 'DESC'
+      direction = @_getSortDirection(key)
+    @sortState[key] = direction
+    @items.setSorting(key, direction, @comparators[key])
+
+  _sortClickHandler: (e) ->
+    comparator = $(e.target).data('comparator')
+    if comparator? and @comparators[comparator]?
+      @sortBy(comparator)
+
+  _getSortDirection: (key) ->
+    if @sortState[key] is 'ASC' then 'DESC' else 'ASC'
+
+  _sortHandler: ->
+    listEl = @listEl()
+    for model in @items.models
+      @append(@rows[model.id].el, listEl)
 
   _reset: ->
     @listEl().empty()
     @rows = {}
+    @selectedItem = null unless @items.get(@selectedItem?.id)
     @_addItem(i) for i in @items.models
+    @select(@selectedItem) if @selectedItem?
 
   _addItem: (item) ->
-    if not @limit? or _.keys(@rows).length < @limit
-      rowClass = @rowClass or RowView
-      row = new rowClass(item, @template).render()
-      @rows[item.id] = row
-      @append(row, @listEl())
-      row.on('select', ((model) -> @trigger 'select', model), this)
+    rowClass = @rowClass or RowView
+    row = new rowClass(item, @template).render()
+    @rows[item.id] = row
+    @append(row, @listEl())
+    row.on('select', ((model) ->
+      @selectedItem = model
+      @trigger 'select', model), this)
 
   _removeItem: (item) ->
     @rows[item.id]?.remove()
     delete @rows[item.id]
+    @selectedItem = null if @selectedItem is item
 
   render: ->
     @populate()

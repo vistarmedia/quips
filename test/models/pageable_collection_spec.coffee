@@ -8,7 +8,7 @@ PageableCollection = require 'models/pageable_collection'
 
 class MockModel extends  Model
 
-class MockColletion extends Collection
+class MockCollection extends Collection
   model: MockModel
   url: '/mock/'
 
@@ -17,7 +17,7 @@ describe 'Pageable Collection', ->
 
   beforeEach ->
     @state = test.create()
-    @collection = new MockColletion()
+    @collection = new MockCollection()
 
   afterEach ->
     @state.destroy()
@@ -168,7 +168,7 @@ describe 'Pageable Collection', ->
 
   describe 'sorting', ->
 
-    it 'should be able to make ascending and descending comparators', ->
+    it 'should be able to sort across pages`', ->
       @collection.add([
         @collection.create(name: 'D'),
         @collection.create(name: 'F'),
@@ -181,17 +181,24 @@ describe 'Pageable Collection', ->
       expect(@pageableCollection.models[0].get('name')).to.equal 'D'
       expect(@pageableCollection.models[2].get('name')).to.equal 'A'
 
-      @pageableCollection.setSorting('name', -1, (model, key) ->
+      @pageableCollection.setSorting('name', 'ASC', (model, key) ->
         model.get(key).toLowerCase())
       expect(@pageableCollection.models[0].get('name')).to.equal 'A'
       expect(@pageableCollection.models[1].get('name')).to.equal 'c'
       expect(@pageableCollection.models[2].get('name')).to.equal 'D'
+      @pageableCollection.getNextPage()
+      expect(@pageableCollection.models[0].get('name')).to.equal 'E'
+      expect(@pageableCollection.models[1].get('name')).to.equal 'F'
 
-      @pageableCollection.setSorting('name', 1, (model, key) ->
+      @pageableCollection.setSorting('name', 'DESC', (model, key) ->
         model.get(key).toLowerCase())
+      @pageableCollection.getFirstPage()
       expect(@pageableCollection.models[0].get('name')).to.equal 'F'
       expect(@pageableCollection.models[1].get('name')).to.equal 'E'
       expect(@pageableCollection.models[2].get('name')).to.equal 'D'
+      @pageableCollection.getNextPage()
+      expect(@pageableCollection.models[0].get('name')).to.equal 'c'
+      expect(@pageableCollection.models[1].get('name')).to.equal 'A'
 
   describe 'trigger events', ->
 

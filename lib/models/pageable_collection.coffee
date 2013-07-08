@@ -23,22 +23,6 @@ validateAndGetTotalPages = (state, totalRecords) ->
 
   totalPages
 
-makeComparator = (sortKey, order, sortValue) ->
-  return unless sortKey? and order?
-  unless sortValue? then sortValue = (model, attr) -> model.get(attr)
-
-  (left, right) ->
-    l = sortValue(left, sortKey)
-    r = sortValue(right, sortKey)
-    if (order is 1)
-      temp = l
-      l = r
-      r = temp
-
-    if (l is r) then 0
-    else if (l < r) then -1
-    else 1
-
 defaultState = ->
   currentPage: 1
   pageSize: 25
@@ -88,9 +72,7 @@ class PageableCollection extends Collection
     @trigger('current_page_changed') unless @state.currentPage is oldCurrentPage
 
   setSorting: (sortKey, order, sortValue) ->
-    return unless sortKey? and order?
-    @fullCollection.comparator = makeComparator(sortKey, order, sortValue)
-    @fullCollection.sort()
+    @fullCollection.setSorting(sortKey, order, sortValue)
 
   _addHandler: (model, collection, options) ->
     oldTotalPages = @state.totalPages
