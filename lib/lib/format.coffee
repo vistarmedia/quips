@@ -1,4 +1,4 @@
-moment = require 'moment'
+moment = require 'momentify'
 
 commafy = (value) ->
   value.toString().replace /(^|[^\w.])(\d{4,})/g, ($0, $1, $2) ->

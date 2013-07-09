@@ -2,7 +2,7 @@ _        = require 'underscore'
 jQuery   = require 'jqueryify'
 Deferred = jQuery.Deferred
 JSON     = require 'json2ify'
-moment   = require 'moment'
+moment   = require 'momentify'
 
 Format  = require './format'
 View    = require '../views/view'
