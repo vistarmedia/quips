@@ -1,9 +1,8 @@
-require './date'
-
 _        = require 'underscore'
 jQuery   = require 'jqueryify'
 Deferred = jQuery.Deferred
 JSON     = require 'json2ify'
+moment   = require 'moment'
 
 Format  = require './format'
 View    = require '../views/view'
@@ -11,7 +10,7 @@ View    = require '../views/view'
 
 class FormView extends View
   errorTemplate: ->
-    throw('Must override errorTemplate')
+    throw Error('Must override errorTemplate')
 
   constructor: (@model, opts) ->
     @deferred = new Deferred()
@@ -118,11 +117,9 @@ class FormView extends View
 
 
 dateToString = (date) ->
-  isoDate = date.toISOString()
-  if isoDate is 'Invalid Date'
+  if _.isNaN(date.getTime())
     throw TypeError('Invalid Date')
-  isoDate.split('.')[0] + 'Z'
-
+  moment(date).toISOString().split('.')[0] + 'Z'
 
 stringField =
   get: (el) -> el.val()
@@ -172,7 +169,7 @@ dateField =
 
   set: (el, value) ->
     date = if value? then new Date(value) else Date.now()
-    el.val(date.toString('MM/dd/yyyy'))
+    el.val(moment(date).format('MM/DD/YYYY'))
 
 
 dateTimeField =
@@ -192,9 +189,9 @@ dateTimeField =
     if _.isNaN(date.getTime())
       throw new TypeError('Invalid date string')
 
-    el.filter('.date').val(date.toString('MM/dd/yyyy'))
+    el.filter('.date').val(moment(date).format('MM/DD/YYYY'))
 
-    timeEl.val(date.toString('h:00 tt'))
+    timeEl.val(moment(date).format('h:00 A'))
 
   populate: (select) ->
     return if select.children().length

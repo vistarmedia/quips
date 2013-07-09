@@ -1,5 +1,3 @@
-require 'lib/date'
-
 test    = require '../setup'
 expect  = require('chai').expect
 $       = require 'jqueryify'

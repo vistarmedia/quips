@@ -11,7 +11,6 @@ global.jQuery          = require 'jqueryify'
 global.jQuery.contains = -> true
 
 Backbone        = require 'backbone'
-datepicker      = require 'lib/jquery-ui-1.8.22.datepicker-only.min'
 MockHttpServer  = require('./lib/mock_server').MockHttpServer
 
 require.extensions['.haml'] = (module, filename) ->

@@ -1,5 +1,4 @@
-require './date'
-
+moment = require 'moment'
 
 commafy = (value) ->
   value.toString().replace /(^|[^\w.])(\d{4,})/g, ($0, $1, $2) ->
@@ -7,14 +6,14 @@ commafy = (value) ->
 
 date = (dateString) ->
   date = new Date(dateString)
-  formattedDate = date.toString('M/d/yyyy')
+  formattedDate = moment(date).format('M/D/YYYY')
   if formattedDate.indexOf('NaN') is -1
     formattedDate
   else
     ''
 dateTime = (dateTimeString) ->
   date = new Date(dateTimeString)
-  formattedDate = date.toString('M/d/yyyy h:mm tt')
+  formattedDate = moment(date).format('M/D/YYYY h:mm A')
   if formattedDate.indexOf('NaN') is -1
     formattedDate
   else

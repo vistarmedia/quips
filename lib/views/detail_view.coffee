@@ -1,6 +1,7 @@
-View    = require './view'
-Sticky  = require '../lib/sticky'
 $       = require 'jqueryify'
+
+View    = require './view'
+
 
 
 class DetailView extends View
@@ -8,10 +9,8 @@ class DetailView extends View
   events:
     'click .delete': 'delete'
 
-  constructor: (@opts) ->
-    super
-
   show: (@item) ->
+    @item.on 'destroy', @empty, this
     @render()
 
   delete: (e) ->
@@ -26,18 +25,6 @@ class DetailView extends View
     return this unless @item?
     @html @template(@item.json())
     @populate()
-
-    # Only stick if the user will have to scroll -
-    # that is, only if a sibling view is larger than the current window height
-    contentHeight = if @opts?.contentSelector?
-      $(@opts.contentSelector).height()
-    else
-      Math.max($(x).height() for x in @$el.parent().siblings())
-
-    if @opts?.sticky and contentHeight > $(window).height()
-      Sticky.stickify @$el,
-        padding: @opts?.stickyPadding or 0
-
     this
 
 

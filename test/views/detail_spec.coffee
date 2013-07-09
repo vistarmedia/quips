@@ -6,6 +6,7 @@ DetailView = require 'views/detail_view'
 
 
 class TestModel extends Model
+  url: '/test/'
 
 class TestDetailView extends DetailView
   template: require '../templates/detail_view'
@@ -74,3 +75,11 @@ describe 'Test Detail View', ->
     @view.show(item2)
     @view.$el.find('.delete').click()
 
+  it 'should be empty when the model is destroyed', ->
+    test.when 'DELETE', '/test/net-1', ->
+      status: 204
+
+    @view.show(@item)
+    expect(@view.render().html()).to.include 'Test 1'
+    @item.destroy()
+    expect(@view.$el.html()).to.not.include 'Test 1'

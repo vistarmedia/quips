@@ -18,6 +18,3 @@ currently, quips will assume a rest resource "/session/" which responds to GET, 
 
 ###Block UI Integration
 you may create a global blocking UI overlay from any view by calling block() on that view. unblocking is just as simple by calling unblock().
-
-###Sticky Sidebar Integration
-any DetailView can be passed the sticky:true option to its constructor. this will make sure it stays visible during scrolling.
