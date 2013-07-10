@@ -74,11 +74,11 @@ class PageableCollection extends Collection
   setSorting: (order, sortValue) ->
     @fullCollection.setSorting(order, sortValue)
 
-  _addHandler: (model, collection, options) ->
+  _addHandler: (model) ->
     oldTotalPages = @state.totalPages
     @state.totalPages = validateAndGetTotalPages(@state, @fullCollection.length)
     @_totalPagesChanged(oldTotalPages)
-    addedIndex = options.index
+    addedIndex = @fullCollection.indexOf(model)
     pageStart = (@state.currentPage - 1) * @state.pageSize
     pageEnd = pageStart + @state.pageSize
     if addedIndex >= pageStart and addedIndex < pageEnd
@@ -89,7 +89,8 @@ class PageableCollection extends Collection
     else if addedIndex < pageStart and @state.currentPage > 1
       if @length > @state.pageSize
         @remove(@at(@state.pageSize))
-      @add(@fullCollection.at(pageStart - 1), at: pageStart)
+      @add(@fullCollection.at(pageStart), at: 0)
+    @trigger('sort')
 
   _removeHandler: (model, collection, options) ->
     state = _.extend(_.clone(@state), currentPage: 1)
@@ -122,8 +123,8 @@ class PageableCollection extends Collection
       @getPage(@state.totalPages)
     @getPage(@state.currentPage)
 
-  _sortHandler: ->
-    @getPage(@state.currentPage)
+  _sortHandler: (collection, options) ->
+    @getPage(@state.currentPage) unless options?.add
 
   _totalPagesChanged: (oldTotalPages) ->
     @trigger('total_pages_changed') unless oldTotalPages is @state.totalPages
