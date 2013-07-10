@@ -71,8 +71,8 @@ class PageableCollection extends Collection
     @reset(pageModels)
     @trigger('current_page_changed') unless @state.currentPage is oldCurrentPage
 
-  setSorting: (sortKey, order, sortValue) ->
-    @fullCollection.setSorting(sortKey, order, sortValue)
+  setSorting: (order, sortValue) ->
+    @fullCollection.setSorting(order, sortValue)
 
   _addHandler: (model, collection, options) ->
     oldTotalPages = @state.totalPages

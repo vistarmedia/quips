@@ -181,8 +181,8 @@ describe 'Pageable Collection', ->
       expect(@pageableCollection.models[0].get('name')).to.equal 'D'
       expect(@pageableCollection.models[2].get('name')).to.equal 'A'
 
-      @pageableCollection.setSorting('name', 'ASC', (model, key) ->
-        model.get(key).toLowerCase())
+      @pageableCollection.setSorting('ASC', (model) ->
+        model.get('name').toLowerCase())
       expect(@pageableCollection.models[0].get('name')).to.equal 'A'
       expect(@pageableCollection.models[1].get('name')).to.equal 'c'
       expect(@pageableCollection.models[2].get('name')).to.equal 'D'
@@ -190,8 +190,8 @@ describe 'Pageable Collection', ->
       expect(@pageableCollection.models[0].get('name')).to.equal 'E'
       expect(@pageableCollection.models[1].get('name')).to.equal 'F'
 
-      @pageableCollection.setSorting('name', 'DESC', (model, key) ->
-        model.get(key).toLowerCase())
+      @pageableCollection.setSorting('DESC',
+        (model) -> model.get('name').toLowerCase())
       @pageableCollection.getFirstPage()
       expect(@pageableCollection.models[0].get('name')).to.equal 'F'
       expect(@pageableCollection.models[1].get('name')).to.equal 'E'

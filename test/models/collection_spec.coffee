@@ -41,16 +41,14 @@ describe 'Collection', ->
       expect(collection.models[0].get('name')).to.equal 'D'
       expect(collection.models[2].get('name')).to.equal 'A'
 
-      collection.setSorting('name', 'ASC', (model, key) ->
-        model.get(key).toLowerCase())
+      collection.setSorting('ASC', (model) -> model.get('name').toLowerCase())
       expect(collection.models[0].get('name')).to.equal 'A'
       expect(collection.models[1].get('name')).to.equal 'c'
       expect(collection.models[2].get('name')).to.equal 'D'
       expect(collection.models[3].get('name')).to.equal 'E'
       expect(collection.models[4].get('name')).to.equal 'F'
 
-      collection.setSorting('name', 'DESC', (model, key) ->
-        model.get(key).toLowerCase())
+      collection.setSorting('DESC', (model) -> model.get('name').toLowerCase())
       expect(collection.models[0].get('name')).to.equal 'F'
       expect(collection.models[1].get('name')).to.equal 'E'
       expect(collection.models[2].get('name')).to.equal 'D'

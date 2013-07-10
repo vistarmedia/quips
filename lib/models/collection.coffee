@@ -1,15 +1,13 @@
 Backbone = require 'backbone'
+_        = require 'underscore'
 
 events = require '../lib/events'
 
 
-makeComparator = (sortKey, order, sortValue) ->
-  return unless sortKey? and order?
-  unless sortValue? then sortValue = (model, attr) -> model.get(attr)
-
+makeComparator = (order, sortFunc) ->
   (left, right) ->
-    l = sortValue(left, sortKey)
-    r = sortValue(right, sortKey)
+    l = sortFunc(left)
+    r = sortFunc(right)
     if (order is 'DESC')
       temp = l
       l = r
@@ -42,9 +40,13 @@ class Collection extends Backbone.Collection
     @on(events, syncThis, this)
     otherCol.on(events, syncOther, this)
 
-  setSorting: (sortKey, order, sortValue) ->
-    return unless sortKey? and order?
-    @comparator = makeComparator(sortKey, order, sortValue)
+  setSorting: (order, sortFunc) ->
+    unless _.isFunction(sortFunc)
+      throw TypeError('Second argument to setSorting must be a function')
+    unless order is 'DESC' or order is 'ASC'
+      throw TypeError(
+        "First argument to setSorting must be either 'DESC' or 'ASC'")
+    @comparator = makeComparator(order, sortFunc)
     @sort()
 
 

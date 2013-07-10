@@ -73,7 +73,7 @@ class ListView extends View
     unless direction is 'ASC' or direction is 'DESC'
       direction = @_getSortDirection(key)
     @sortState[key] = direction
-    @items.setSorting(key, direction, @comparators[key])
+    @items.setSorting(direction, @comparators[key])
 
   _sortClickHandler: (e) ->
     comparator = $(e.target).data('comparator')
