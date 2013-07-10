@@ -44,6 +44,25 @@ describe 'ListView', ->
     # All that should be left is the collection binding
     expect(do listeners).to.have.length 1
 
+  it 'should not leak event references on reset', ->
+    model = new MockModel(id: 'model-1')
+    @collection.add model
+    listView = new lists.ListView(@collection)
+    listeners = -> _.flatten((v for k, v of model._events))
+    expect(do listeners).to.have.length 3
+    @collection.reset([])
+    expect(do listeners).to.have.length 0
+
+  it 'should not leak event references on select', ->
+    model = new MockModel(id: 'model-1')
+    @collection.add model
+    listView = new lists.ListView(@collection)
+    row = listView.rows[model.id]
+    listeners = -> _.flatten((v for k, v of row._events))
+    expect(do listeners).to.have.length 1
+    row.remove()
+    expect(do listeners).to.have.length 0
+
   it 'should remove a row on deletion', ->
     model = new MockModel(id: 'model-1')
     @collection.add model

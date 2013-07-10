@@ -90,7 +90,9 @@ class ListView extends View
 
   _reset: ->
     @listEl().empty()
-    @rows = {}
+    for key, view of @rows
+      view.remove()
+      delete @rows[key]
     @selectedItem = null unless @items.get(@selectedItem?.id)
     @_addItem(i) for i in @items.models
     @select(@selectedItem) if @selectedItem?
@@ -100,9 +102,9 @@ class ListView extends View
     row = new rowClass(item, @template).render()
     @rows[item.id] = row
     @append(row, @listEl())
-    row.on('select', ((model) ->
+    row.on('select', ((model) =>
       @selectedItem = model
-      @trigger 'select', model), this)
+      @trigger 'select', model), row)
 
   _removeItem: (item) ->
     @rows[item.id]?.remove()
