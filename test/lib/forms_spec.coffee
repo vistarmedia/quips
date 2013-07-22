@@ -50,6 +50,17 @@ describe 'Form View', ->
     expect(ageField.val()).to.equal '23'
     expect(olderThanAndrew.prop('checked')).to.be.true
 
+  it 'should allow fields to be a function', ->
+    class TestForm2 extends forms.FormView
+      template:       require './form_view_spec_template'
+      errorTemplate:  require './form_error'
+
+      fields: ->
+        name:             forms.stringField
+
+    form = new TestForm2(@lilBilly).render()
+    expect(form._getUpdate()['name']).to.equal "Li'l Billy"
+
   it 'should set a date', ->
     @lilBilly.set(birthday: '1991-02-24T04:22:34Z')
     form = new TestForm(@lilBilly).render()

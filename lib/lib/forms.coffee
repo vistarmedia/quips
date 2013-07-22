@@ -95,7 +95,7 @@ class FormView extends View
     @$el.find('input').prop('disabled', true)
 
   _populateForm: ->
-    for name, field of @fields
+    for name, field of _.result(this, 'fields')
       value = @model.get(name)
       el = @$el.find("[name=#{name}]")
       field.set(el, value)
@@ -103,7 +103,7 @@ class FormView extends View
   _getUpdate: ->
     update = {}
     errors = {}
-    for name, field of @fields
+    for name, field of _.result(this, 'fields')
       el = @$el.find("[name=#{name}]")
       try
         update[name] = field.get(el)
