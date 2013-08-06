@@ -142,6 +142,21 @@ intField =
     el.val(Format.commafy(int))
 
 
+floatField =
+  get: (el, defaultValue) ->
+    float = parseFloat(el.val())
+    if _.isNaN(float)
+      return defaultValue if defaultValue?
+      throw TypeError('Invalid Number')
+    float
+
+  set: (el, value) ->
+    float = parseFloat(value)
+    if _.isNaN(float)
+      float = 0
+    el.val(float)
+
+
 moneyField =
   get: (el, defaultValue) ->
     stripped = el.val().replace(/\,/g, '')
@@ -209,6 +224,7 @@ module.exports =
   FormView:       FormView
   stringField:    stringField
   intField:       intField
+  floatField:     floatField
   moneyField:     moneyField
   boolField:      boolField
   dateField:      dateField

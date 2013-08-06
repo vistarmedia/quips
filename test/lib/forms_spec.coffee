@@ -350,6 +350,40 @@ describe 'Money Field', ->
       forms.moneyField.set(@el, '12345678.38')
       expect(@el.val()).to.equal('12,345,678.38')
 
+describe 'Float Field', ->
+
+  beforeEach ->
+    test.create()
+    @el = $('<input type="text"/>')
+
+  afterEach ->
+    test.destroy()
+
+  describe 'when setting a value', ->
+    it 'should set a proper decimal', ->
+      @el.val('')
+      forms.floatField.set(@el, '123.456')
+      expect(@el.val()).to.equal('123.456')
+
+    it 'should set a zero when NaN', ->
+      @el.val('')
+      forms.floatField.set(@el, NaN)
+      expect(@el.val()).to.equal('0')
+
+    it 'should set a zero when no value', ->
+      @el.val('')
+      forms.floatField.set(@el, '')
+      expect(@el.val()).to.equal('0')
+
+describe 'Money Field', ->
+
+  beforeEach ->
+    test.create()
+    @el = $('<input type="text"/>')
+
+  afterEach ->
+    test.destroy()
+
   describe 'when getting a value', ->
     it 'should have 2 places', ->
       @el.val('123.456')

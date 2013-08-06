@@ -10,13 +10,13 @@ module.exports =
   PageableCollection: require './lib/models/pageable_collection'
 
   # Views
-  View:           require './lib/views/view'
   DetailView:     require './lib/views/detail_view'
   ListView:       require('./lib/views/list_view').ListView
   LoginView:      require './lib/views/login/login_view'
   NavigationView: require './lib/views/navigation_view'
   NoticeView:     require './lib/views/notice_view'
   RowView:        require('./lib/views/list_view').RowView
+  View:           require './lib/views/view'
 
   # Controllers
   Controller:           require './lib/controllers/controller'
@@ -26,17 +26,19 @@ module.exports =
 
   # Forms
   FormView:       require('./lib/lib/forms').FormView
-  stringField:    require('./lib/lib/forms').stringField
-  intField:       require('./lib/lib/forms').intField
-  moneyField:     require('./lib/lib/forms').moneyField
+
   boolField:      require('./lib/lib/forms').boolField
   dateField:      require('./lib/lib/forms').dateField
   dateTimeField:  require('./lib/lib/forms').dateTimeField
+  floatField:     require('./lib/lib/forms').floatField
+  intField:       require('./lib/lib/forms').intField
+  moneyField:     require('./lib/lib/forms').moneyField
+  stringField:    require('./lib/lib/forms').stringField
 
   # Formatters
   formatters:   require './lib/lib/format'
 
   # Test
   ChaiExtensions: require './test/lib/chai_extensions'
-  MockHttpServer: require('./test/lib/mock_server').MockHttpServer
   Combiner: require './lib/lib/combiner'
+  MockHttpServer: require('./test/lib/mock_server').MockHttpServer
