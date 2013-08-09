@@ -55,6 +55,7 @@ class View extends Backbone.View
           css:
             border: 'none'
             padding: opts?.css?.padding or '30px'
+            margin: opts?.css?.margin or '0'
             backgroundColor: opts?.css?.backgroundColor or '#000'
             '-webkit-border-radius': '10px'
             '-moz-border-radius': '10px'
