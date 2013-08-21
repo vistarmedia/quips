@@ -55,12 +55,15 @@ module.exports =
 
     for [method, url, respond] in @patterns
       if method is request.method and url is request.url
-        resp = respond(request) or {}
-        resp.status   or= 200
-        resp.body     or= ''
+        try
+          resp = respond(request) or {}
+          resp.status   or= 200
+          resp.body     or= ''
 
-        request.receive resp.status, resp.body
-        handed = true
+          request.receive resp.status, resp.body
+          handed = true
+        catch e
+          console.log(e.message)
 
     unless handed
       request.receive 404, 'Not Found'

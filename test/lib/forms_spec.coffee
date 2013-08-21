@@ -19,6 +19,7 @@ class TestForm extends forms.FormView
     gender:           forms.stringField
     olderThanAndrew:  forms.boolField
     youngerThanMark:  forms.intField
+    readOnlyField:    forms.stringField
 
 
 describe 'Form View', ->
@@ -198,6 +199,19 @@ describe 'Form View', ->
       catch errors
         expect(errors['age']).to.have.length 1
         expect(errors['age'][0]).to.equal 'Invalid Number'
+
+    it 'should disable the form until the save is complete', (done) ->
+      test.when 'POST', '/lils/billy', (req) =>
+        expect(@form.$el.find(':input:disabled')).to.have.length 9
+        status: 204
+
+      expect(@form.$el.find(':input:disabled').length).to.equal 1
+      @form.on('saved', (->
+        # originally disabled element is preserved
+        expect(@form.$el.find(':input:disabled').length).to.equal 1
+        done()), this)
+
+      @form.save()
 
     describe 'and the input is invalid', ->
 

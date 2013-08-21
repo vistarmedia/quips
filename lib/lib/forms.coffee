@@ -27,8 +27,11 @@ class FormView extends View
 
   save: (e) ->
     e?.preventDefault()
+    @_hideErrors()
+    elements = @_disableForm()
+
     local = new Deferred
-    local.always => @_enableForm()
+    local.always => @_enableElements(elements)
 
     onError = (errors) =>
       local.reject(errors)
@@ -40,9 +43,6 @@ class FormView extends View
       @deferred.notify()
       @deferred.resolve(@model)
       @trigger('saved')
-
-    @_hideErrors()
-    @_disableForm()
 
     try
       update = @_getUpdate()
@@ -88,11 +88,13 @@ class FormView extends View
 
       parent.addClass('error')
 
-  _enableForm: ->
-    @$el.find('input').prop('disabled', false)
+  _enableElements: (elements) ->
+    elements.prop('disabled', false)
 
   _disableForm: ->
-    @$el.find('input').prop('disabled', true)
+    enabledElements = @$el.find(':input:not(:disabled)')
+    enabledElements.prop('disabled', true)
+    enabledElements
 
   _populateForm: ->
     for name, field of _.result(this, 'fields')
