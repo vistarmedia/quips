@@ -103,8 +103,9 @@ class ListView extends View
     @rows[item.id] = row
     @append(row, @listEl())
     row.on('select', ((model) =>
-      @selectedItem = model
-      @trigger 'select', model), row)
+      if model isnt @selectedItem
+        @selectedItem = model
+        @trigger 'select', model), row)
 
   _removeItem: (item) ->
     @rows[item.id]?.remove()
