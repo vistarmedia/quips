@@ -11,9 +11,13 @@ class Controller extends Backbone.Router
   constructor: (opts) ->
     super
 
-    @history = if (opts? and opts.history?) then opts.history else Backbone.history
+    @history = if (opts? and opts.history?)
+      opts.history
+    else
+      Backbone.history
+
     @_localEl = @_createLocalEl()
-    @_pageEl  = $(opts?.el or '<div>')
+    @_pageEl  or= $(opts?.el or '<div>')
 
     @_setupViews()
     @_setupEventHandling()
