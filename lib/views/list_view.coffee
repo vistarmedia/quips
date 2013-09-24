@@ -7,7 +7,7 @@ class RowView extends View
   events:
     'click': '_selected'
 
-  constructor: (@model, @template) ->
+  constructor: (@model, @template, @opts) ->
     super(id: @model.id)
 
     @model.on 'change', @render, this
@@ -24,8 +24,9 @@ class RowView extends View
     @$el.addClass('hidden')
 
   _selected: ->
-    @highlight()
-    @trigger 'select', @model
+    unless @opts?.unselectable
+      @highlight()
+      @trigger 'select', @model
 
 
 class ListView extends View
@@ -58,8 +59,7 @@ class ListView extends View
     @_reset()
 
   select: (item) ->
-    selectable = @opts?.selectable or true
-    if selectable
+    unless @opts?.unselectable
       @rows[item.id]?.highlight()
       @selectedItem = item
 
@@ -101,7 +101,7 @@ class ListView extends View
 
   _addItem: (item) ->
     rowClass = @rowClass or RowView
-    row = new rowClass(item, @template).render()
+    row = new rowClass(item, @template, @opts).render()
     @rows[item.id] = row
     @append(row, @listEl())
     row.on('select', ((model) =>
