@@ -43,7 +43,7 @@ class ListView extends View
   events:
     'click .sort': '_sortClickHandler'
 
-  constructor: (@items, @rowClass) ->
+  constructor: (@items, @rowClass, @opts) ->
     super
 
     @sortState = {}
@@ -58,8 +58,10 @@ class ListView extends View
     @_reset()
 
   select: (item) ->
-    @rows[item.id]?.highlight()
-    @selectedItem = item
+    selectable = @opts?.selectable or true
+    if selectable
+      @rows[item.id]?.highlight()
+      @selectedItem = item
 
   filterBy: (filter) ->
     for id, rowView of @rows
