@@ -2,20 +2,21 @@
   "name": "quips",
   "version": "0.2.14",
   "dependencies": {
-    "coffee-script":   "1.6.x",
-    "jqueryify":       "1.9.1",
-    "json2ify":        "0.0.1",
-    "underscore":      "1.5.1",
     "backbone":        "1.0.0",
+    "coffee-script":   "1.6.x",
     "haml-coffee":     "1.4.1",
     "hem":             "0.2.9",
     "hem-haml-coffee": "0.0.3",
-    "moment":          "2.1.0"
+    "jqueryify":       "1.9.1",
+    "json2ify":        "0.0.1",
+    "moment":          "2.1.0",
+    "underscore":      "1.5.1"
   },
   "devDependencies": {
+    "chai":            "1.7.2",
     "jsdom":           "0.2.15",
     "mocha":           "1.12.0",
-    "chai":            "1.7.2"
+    "request":         "2.27.0"
   },
   "optionalDependencies": {},
   "engines": {
