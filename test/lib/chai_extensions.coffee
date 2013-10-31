@@ -22,3 +22,11 @@ module.exports = (chai, utils) ->
       'expected #{this} to have element #{exp}',
       'expected #{this} to not have element #{exp}',
       selector
+
+  chai.Assertion.addMethod 'text', (expected) ->
+    value = flag(this, 'object').text()
+
+    @assert value is expected,
+      'expected #{this} to have text #{exp}, but got #{act}',
+      'expected #{this} not to have text #{exp}',
+      expected, value
