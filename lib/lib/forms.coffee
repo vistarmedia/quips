@@ -189,6 +189,20 @@ dateField =
     el.val(moment(date).format('MM/DD/YYYY'))
 
 
+populateTimes = (select, isEnd) ->
+  return if select.children().length
+  mins = if isEnd then '59' else '00'
+
+  for tt in ['AM', 'PM']
+    for hour in [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+      label = "#{hour}:#{mins} #{tt}"
+      jQuery('<option>')
+        .attr('value', label)
+        .text(label)
+        .appendTo(select)
+        .prop('selected', hour is 11 and isEnd)
+
+
 dateTimeField =
   get: (el) ->
     dateStr = el.filter('.date').val()
@@ -200,34 +214,44 @@ dateTimeField =
 
   set: (el, value) ->
     timeEl = el.filter 'select.time'
-    @populate(timeEl)
+    populateTimes(timeEl, false)
     return unless value?
     date = new Date(value)
     if _.isNaN(date.getTime())
       throw new TypeError('Invalid date string')
 
     el.filter('.date').val(moment(date).format('MM/DD/YYYY'))
-
     timeEl.val(moment(date).format('h:00 A'))
 
-  populate: (select) ->
-    return if select.children().length
 
-    for tt in ['AM', 'PM']
-      for hour in [12, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-        label = "#{hour}:00 #{tt}"
-        jQuery('<option>')
-          .attr('value', label)
-          .text(label)
-          .appendTo(select)
+endDateTimeField =
+  get: (el) ->
+    dateStr = el.filter('.date').val()
+    timeStr = el.filter('.time').val() or ''
+    if dateStr is '' or timeStr is ''
+      return null
+
+    dateToString(new Date("#{dateStr} #{timeStr}"))
+
+  set: (el, value) ->
+    timeEl = el.filter 'select.time'
+    populateTimes(timeEl, true)
+    return unless value?
+    date = new Date(value)
+    if _.isNaN(date.getTime())
+      throw new TypeError('Invalid date string')
+
+    el.filter('.date').val(moment(date).format('MM/DD/YYYY'))
+    timeEl.val(moment(date).format('h:59 A'))
 
 
 module.exports =
-  FormView:       FormView
-  stringField:    stringField
-  intField:       intField
-  floatField:     floatField
-  moneyField:     moneyField
-  boolField:      boolField
-  dateField:      dateField
-  dateTimeField:  dateTimeField
+  FormView:         FormView
+  stringField:      stringField
+  intField:         intField
+  floatField:       floatField
+  moneyField:       moneyField
+  boolField:        boolField
+  dateField:        dateField
+  dateTimeField:    dateTimeField
+  endDateTimeField: endDateTimeField

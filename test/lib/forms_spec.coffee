@@ -415,7 +415,6 @@ describe 'Money Field', ->
       @el.val('5,000,000')
       expect(forms.moneyField.get(@el)).to.equal '5000000.00'
 
-
 describe 'Date Time Field', ->
   beforeEach ->
     test.create()
@@ -433,13 +432,16 @@ describe 'Date Time Field', ->
     test.destroy()
 
   it 'should populate the time choices on set', ->
-    expect(@input.filter('.date')).to.have.val ''
-    expect(@input.filter('.time')).to.have.val null
+    $date = @input.filter('.date')
+    $time = @input.filter('.time')
+
+    expect($date).to.have.val ''
+    expect($time).to.have.val null
 
     forms.dateTimeField.set(@input, @date)
-    expect(@input.filter('.date')).to.have.val '09/02/1945'
-    expect(@input.filter('.time').find('option')).to.have.length 24
-    expect(@input.filter('.time')).to.have.val '8:00 AM'
+    expect($date).to.have.val '09/02/1945'
+    expect(($time).find('option')).to.have.length 24
+    expect($time).to.have.val '8:00 AM'
 
   it 'should populate the time choices on set with null date', ->
     forms.dateTimeField.set(@input, null)
@@ -449,3 +451,40 @@ describe 'Date Time Field', ->
     forms.dateTimeField.set(@input, @date)
     datetime = forms.dateTimeField.get(@input)
     expect(datetime).to.equal '1945-09-02T13:00:00Z'
+
+describe 'End Date Time Field', ->
+  beforeEach ->
+    test.create()
+    @doc = $ """
+      <p>
+        <input type="text" name="start_date" class="date"/>
+        <select name="start_date" class="time"></select>
+      </p>
+    """
+
+    @input = @doc.find '[name=start_date]'
+    @date  = '1945-09-02T13:45:55Z'
+
+  afterEach ->
+    test.destroy()
+
+  it 'should populate the time choices on set', ->
+    $date = @input.filter('.date')
+    $time = @input.filter('.time')
+
+    expect($date).to.have.val ''
+    expect($time).to.have.val null
+
+    forms.endDateTimeField.set(@input, @date)
+    expect($date).to.have.val '09/02/1945'
+    expect(($time).find('option')).to.have.length 24
+    expect($time).to.have.val '8:59 AM'
+
+  it 'should populate the time choices on set with null date', ->
+    forms.endDateTimeField.set(@input, null)
+    expect(@input.filter('.time').find('option')).to.have.length 24
+
+  it 'should the value from a form', ->
+    forms.endDateTimeField.set(@input, @date)
+    datetime = forms.dateTimeField.get(@input)
+    expect(datetime).to.equal '1945-09-02T13:59:00Z'
