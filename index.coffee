@@ -27,14 +27,15 @@ module.exports =
   # Forms
   FormView:       require('./lib/lib/forms').FormView
 
-  boolField:        require('./lib/lib/forms').boolField
-  dateField:        require('./lib/lib/forms').dateField
-  dateTimeField:    require('./lib/lib/forms').dateTimeField
-  endDateTimeField: require('./lib/lib/forms').endDateTimeField
-  floatField:       require('./lib/lib/forms').floatField
-  intField:         require('./lib/lib/forms').intField
-  moneyField:       require('./lib/lib/forms').moneyField
-  stringField:      require('./lib/lib/forms').stringField
+  boolField:          require('./lib/lib/forms').boolField
+  dateField:          require('./lib/lib/forms').dateField
+  dateTimeField:      require('./lib/lib/forms').dateTimeField
+  endDateTimeField:   require('./lib/lib/forms').endDateTimeField
+  floatField:         require('./lib/lib/forms').floatField
+  intField:           require('./lib/lib/forms').intField
+  nonGroupedIntField: require('./lib/lib/forms').nonGroupedIntField
+  moneyField:         require('./lib/lib/forms').moneyField
+  stringField:        require('./lib/lib/forms').stringField
 
   # Formatters
   formatters:   require './lib/lib/format'

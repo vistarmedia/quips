@@ -143,6 +143,20 @@ intField =
       int = 0
     el.val(Format.commafy(int))
 
+nonGroupedIntField =
+  get: (el, defaultValue) ->
+    stripped = el.val().replace(/\,/g, '')
+    i = parseInt(stripped, 10)
+    if _.isNaN(i)
+      return defaultValue if defaultValue?
+      throw TypeError('Invalid Number')
+    i
+
+  set: (el, value) ->
+    int = parseInt(value, 10)
+    if _.isNaN(int)
+      int = 0
+    el.val(int)
 
 floatField =
   get: (el, defaultValue) ->
@@ -246,12 +260,13 @@ endDateTimeField =
 
 
 module.exports =
-  FormView:         FormView
-  stringField:      stringField
-  intField:         intField
-  floatField:       floatField
-  moneyField:       moneyField
-  boolField:        boolField
-  dateField:        dateField
-  dateTimeField:    dateTimeField
-  endDateTimeField: endDateTimeField
+  FormView:           FormView
+  stringField:        stringField
+  intField:           intField
+  nonGroupedIntField: nonGroupedIntField
+  floatField:         floatField
+  moneyField:         moneyField
+  boolField:          boolField
+  dateField:          dateField
+  dateTimeField:      dateTimeField
+  endDateTimeField:   endDateTimeField

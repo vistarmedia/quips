@@ -334,6 +334,43 @@ describe 'Int Field', ->
       @el.val('1,234')
       expect(forms.intField.get(@el)).to.equal 1234
 
+describe 'Non-Grouped Int Field', ->
+
+  beforeEach ->
+    test.create()
+
+  afterEach ->
+    test.destroy()
+
+  describe 'when setting a value', ->
+    it 'should set a zero when NaN', ->
+      @el.val('')
+      forms.nonGroupedIntField.set(@el, NaN)
+      expect(@el.val()).to.equal '0'
+
+    it 'should set a zero when no value', ->
+      @el.val('')
+      forms.nonGroupedIntField.set(@el, '')
+      expect(@el.val()).to.equal '0'
+
+    it 'should not commafy the value', ->
+      @el.val('')
+      forms.nonGroupedIntField.set(@el, 1234567)
+      expect(@el.val()).to.equal '1234567'
+
+  describe 'when getting a value', ->
+    it 'should error when invalid', ->
+      @el.val('THIS IS NOT VALID%&%& 122 @&%')
+      expect(-> forms.nonGroupedIntField.get(@el)).to.throw TypeError
+
+    it 'should return a default value if provided', ->
+      @el.val('THIS IS NOT VALID%&%& 122 @&%')
+      expect(forms.nonGroupedIntField.get(@el, 2)).to.equal 2
+
+    it 'should accept a value with commas', ->
+      @el.val('1,234')
+      expect(forms.nonGroupedIntField.get(@el)).to.equal 1234
+
 describe 'Money Field', ->
 
   beforeEach ->
