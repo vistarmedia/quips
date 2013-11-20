@@ -243,3 +243,57 @@ describe 'Controller', ->
       expect(child.destroyed).to.be.false
       @controller.destroy()
       expect(child.destroyed).to.be.true
+
+describe 'Controller inheritance', ->
+  beforeEach ->
+    test.create()
+    @root = $('<div/>')
+
+    class FirstChildController extends MyController
+
+    class SecondChildController extends FirstChildController
+      views: ->
+        '.slot4': 'viewThree'
+
+      events: ->
+        'viewThree.click': 'haveSwag'
+
+      constructor: ->
+        @viewThree = new EchoView('View Three').render()
+        @swagsHad = 0
+        super
+
+      haveSwag: ->
+        @swagsHad++
+
+    @controller = new SecondChildController el: @root
+
+  afterEach: ->
+    test.destroy()
+    @controller.destroy()
+
+  it 'should be able to extend parent views', ->
+    html = @controller._localEl.html()
+    expect(html).to.include 'View One'
+    expect(html).to.include 'View Two'
+    expect(html).to.include 'View Three'
+
+  it 'should be able to extend parent events', ->
+    expect(@controller.sandwichesEaten).to.equal 0
+    expect(@controller.walksTaken).to.equal 0
+    expect(@controller.swagsHad).to.equal 0
+
+    @controller.viewOne.trigger 'click'
+    expect(@controller.sandwichesEaten).to.equal 1
+    expect(@controller.walksTaken).to.equal 0
+    expect(@controller.swagsHad).to.equal 0
+
+    @controller.viewTwo.trigger 'click'
+    expect(@controller.sandwichesEaten).to.equal 1
+    expect(@controller.walksTaken).to.equal 1
+    expect(@controller.swagsHad).to.equal 0
+
+    @controller.viewThree.trigger 'click'
+    expect(@controller.sandwichesEaten).to.equal 1
+    expect(@controller.walksTaken).to.equal 1
+    expect(@controller.swagsHad).to.equal 1

@@ -2,12 +2,13 @@ $        = require 'jqueryify'
 _        = require 'underscore'
 Backbone = require 'backbone'
 
-events = require '../lib/events'
+events          = require '../lib/events'
+mergeAttributes = require '../lib/merge_attributes'
 
 
 class View extends Backbone.View
   constructor: ->
-    @_mergeEvents()
+    mergeAttributes(this, 'events', 'views')
     super
 
     if navigator?
@@ -88,14 +89,6 @@ class View extends Backbone.View
 
   _blockAvailable: ->
     $.blockUI?
-
-  _mergeEvents: ->
-    constructor = @constructor
-    while constructor?
-      @events = _.defaults(
-        _.result(this, 'events'),
-        _.result(constructor.__super__, 'events'))
-      constructor = constructor?.__super__?.constructor
 
 
 module.exports = events.track View

@@ -1,7 +1,9 @@
 Backbone = require 'backbone'
 $        = require 'jqueryify'
+_        = require 'underscore'
 
-events = require '../lib/events'
+events          = require '../lib/events'
+mergeAttributes = require '../lib/merge_attributes'
 
 
 class Controller extends Backbone.Router
@@ -9,6 +11,7 @@ class Controller extends Backbone.Router
   events: {}
 
   constructor: (opts) ->
+    mergeAttributes(this, 'events', 'views')
     super
 
     @history = if (opts? and opts.history?)
@@ -31,7 +34,7 @@ class Controller extends Backbone.Router
   destroy: ->
     @_cleanupChildView()
 
-    for _, viewName of @views
+    for view, viewName of @views
       @[viewName].remove()
 
     for pattern, methodName of @events
