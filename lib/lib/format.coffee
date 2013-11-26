@@ -56,6 +56,10 @@ modelNames = (models) ->
   else
     "#{names[0...names.length-1].join(', ')}, and #{names[names.length-1]}"
 
+percentage = (number) ->
+  number = parseFloat(number).toFixed(2)
+  "#{number * 100.0}%"
+
 
 module.exports =
   boolean:        boolean
@@ -64,7 +68,8 @@ module.exports =
   dateTime:       dateTime
   decimalNumber:  decimalNumber
   dollars:        dollars
+  modelNames:     modelNames
   money:          money
   number:         number
-  modelNames:     modelNames
+  percentage:     percentage
   zipCode:        zipCode
