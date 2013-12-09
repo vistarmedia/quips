@@ -73,9 +73,10 @@ describe 'Format library', ->
     expect(format.commafy(1234.56424)).to.equal '1,234.56424'
 
   it 'should format a number as percentage', ->
-    expect(format.percentage(0.1)).to.equal '10%'
-    expect(format.percentage(0.333333333333333)).to.equal '33%'
-    expect(format.percentage(0.5)).to.equal '50%'
-    expect(format.percentage(0.999999999999999)).to.equal '100%'
-    expect(format.percentage(1)).to.equal '100%'
-    expect(format.percentage("0.1111")).to.equal '11%'
+    expect(format.percentage(0.1)).to.equal '10.00%'
+    expect(format.percentage(0.333333333333333)).to.equal '33.33%'
+    expect(format.percentage(0.5)).to.equal '50.00%'
+    expect(format.percentage(0.999999999999999)).to.equal '100.00%'
+    expect(format.percentage(1)).to.equal '100.00%'
+    expect(format.percentage("0.1111")).to.equal '11.11%'
+    expect(format.percentage('0.280000000000004')).to.equal '28.00%'
