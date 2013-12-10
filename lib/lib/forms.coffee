@@ -34,9 +34,10 @@ class FormView extends View
     local.always => @_enableElements(elements)
 
     onError = (errors) =>
+      @_showErrors(errors)
       local.reject(errors)
       @deferred.notify(errors)
-      @_showErrors(errors)
+      @trigger('failed', errors)
 
     onSuccess = =>
       local.resolve(@model)

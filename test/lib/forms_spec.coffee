@@ -175,6 +175,35 @@ describe 'Form View', ->
 
       @form.save()
 
+    it 'should insert server-side errors into the markup', (done) ->
+      test.when 'POST', '/lils/billy', (req) ->
+        status: 400
+        body:   JSON.stringify
+          age: ['None uh yer beeswax!']
+
+      @form.save().fail =>
+        ageDiv       = @form.$el.find('.age-div')
+        errorMessage = @form.$el.find('.age-div ul.errors li').text()
+
+        expect(ageDiv.attr('class')).to.include 'error'
+        expect(errorMessage).to.have.string 'None uh yer beeswax!'
+
+        done()
+
+    it 'should emit a "failed" event with the errors', (done) ->
+      test.when 'POST', '/lils/billy', (req) ->
+        status: 400
+        body:   JSON.stringify
+          age: ['None uh yer beeswax!']
+
+      failure = (errors) ->
+        expect(errors.age).to.include 'None uh yer beeswax!'
+        done()
+
+      @form.on 'failed', failure, @form
+
+      @form.save()
+
     it 'should throw an exception with invalid input', ->
       @form.$el.find('[name=birthday]').val("HOW DO YOU USE THIS THING?")
 
