@@ -1,15 +1,10 @@
-test = require '../setup'
+require '../setup'
 
 expect  = require('chai').expect
 combine = require('lib/combiner').combine
 $       = require 'jqueryify'
 
 describe 'Deferred combiner', ->
-  beforeEach ->
-    @state = test.create()
-
-  afterEach ->
-    @state.destroy()
 
   it 'should give progress on individual done calls', (done) ->
     d1 = $.Deferred()
@@ -48,11 +43,6 @@ describe 'Deferred combiner', ->
     expect(combined.state()).to.equal 'rejected'
 
 describe 'jQuery deferreds', ->
-  beforeEach ->
-    @state = test.create()
-
-  afterEach ->
-    @state.destroy()
 
   it 'should notify of failures', (done) ->
     deferred = $.Deferred()

@@ -1,5 +1,5 @@
+require '../setup'
 expect = require('chai').expect
-test   = require '../setup'
 
 Collection         = require 'models/collection'
 Model              = require 'models/model'
@@ -16,11 +16,7 @@ class MockCollection extends Collection
 describe 'Pageable Collection', ->
 
   beforeEach ->
-    @state = test.create()
     @collection = new MockCollection()
-
-  afterEach ->
-    @state.destroy()
 
   it 'should paginate a full collection', ->
     @collection.add(@collection.create id: i for i in [1..11])

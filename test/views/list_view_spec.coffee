@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 $       = require 'jqueryify'
 _       = require 'underscore'
@@ -20,13 +20,10 @@ class MockCollection extends Collection
 describe 'ListView', ->
 
   beforeEach ->
-    test.create()
-
     @collection = new MockCollection
 
   afterEach ->
     @collection.reset()
-    test.destroy()
 
   it 'should not leak event references', ->
     model = new MockModel(id: 'model-1')

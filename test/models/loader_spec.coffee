@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 $       = require 'jqueryify'
 
@@ -12,17 +12,11 @@ class MockModel extends Model
 
 describe 'Model Loader', ->
 
-  beforeEach ->
-    @state = test.create()
-
-  afterEach ->
-    @state.destroy()
-
   it 'should handle collections with a url func', (done) ->
-    test.when 'GET', 'api-root/my/mock/url', (req) ->
+    @server.when 'GET', 'api-root/my/mock/url', (req) ->
       status: 204
 
-    test.when 'GET', 'api-root/my/mock/func/url', (req) ->
+    @server.when 'GET', 'api-root/my/mock/func/url', (req) ->
       status: 204
 
     class MockCollection extends Collection
@@ -46,11 +40,11 @@ describe 'Model Loader', ->
       collectionOneFetches = 0
       collectionTwoFetches = 0
 
-      test.when 'GET', 'api-root/my/mock/func/url1', (req) ->
+      @server.when 'GET', 'api-root/my/mock/func/url1', (req) ->
         collectionOneFetches++
         status: 204
 
-      test.when 'GET', 'api-root/my/mock/func/url2', (req) ->
+      @server.when 'GET', 'api-root/my/mock/func/url2', (req) ->
         collectionTwoFetches++
         status: 204
 
@@ -74,12 +68,12 @@ describe 'Model Loader', ->
   it 'should not fetch lazy collections', (done) ->
     fetches = 0
 
-    test.when 'GET', '/my/mock/url', (req) ->
+    @server.when 'GET', '/my/mock/url', (req) ->
       fetches++
       status: 200
       body: '{"id": "item-1"}'
 
-    test.when 'GET', '/my/lazy/mock/url', (req) ->
+    @server.when 'GET', '/my/lazy/mock/url', (req) ->
       fetches++
       status: 200
       body: '{"id": "lazy-item-1"}'

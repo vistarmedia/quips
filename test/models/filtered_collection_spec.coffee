@@ -1,5 +1,5 @@
+require '../setup'
 expect = require('chai').expect
-test   = require '../setup'
 _      = require 'underscore'
 
 Collection         = require 'models/collection'
@@ -17,14 +17,10 @@ class MockCollection extends Collection
 describe 'Filtered Collection', ->
 
   beforeEach ->
-    @state = test.create()
     @m1 = new MockModel(id: 1, name: 'm1')
     @m2 = new MockModel(id: 2, name: 'm2')
     @m3 = new MockModel(id: 3, name: 'm3')
     @collection = new MockCollection([@m1, @m2, @m3])
-
-  afterEach ->
-    @state.destroy()
 
   it 'should have all existing models on construction', ->
     expect(@collection.length).to.equal 3
@@ -46,7 +42,7 @@ describe 'Filtered Collection', ->
     expect(filtered.length).to.equal 4
 
   it 'should delete a model when deleted from the parent', ->
-    test.when 'DELETE', "/mock/#{@m1.id}", ->
+    @server.when 'DELETE', "/mock/#{@m1.id}", ->
       status: 204
 
     filtered = new FilteredCollection @collection

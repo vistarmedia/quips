@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 $       = require 'jqueryify'
 JSON    = require 'json2ify'
@@ -25,7 +25,6 @@ class TestForm extends forms.FormView
 describe 'Form View', ->
 
   beforeEach ->
-    test.create()
     @lilBilly = new Model
       name:             "Li'l Billy"
       age:              23
@@ -40,7 +39,6 @@ describe 'Form View', ->
 
   afterEach ->
     @form.remove()
-    test.destroy()
 
   it 'should populate a form', ->
     nameField = @form.$el.find('input[name=name]')
@@ -80,7 +78,7 @@ describe 'Form View', ->
     expect(form.$el.find('select[name=gender]')).to.have.val 'male'
 
   it 'should submit the value of a select view', (done) ->
-    test.when 'POST', '/lils/billy', (req) ->
+    @server.when 'POST', '/lils/billy', (req) ->
       postData = $.parseJSON(req.requestText)
       expect(postData.gender).to.equal 'male'
       done()
@@ -111,7 +109,7 @@ describe 'Form View', ->
   describe 'when saving a form', ->
 
     it 'should post the update to the server', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         body: JSON.stringify
           age:  -1
           name: 'Steve'
@@ -126,7 +124,7 @@ describe 'Form View', ->
         done()
 
     it 'should return errors from server', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         status: 400
         body:   JSON.stringify
           age: ['None uh yer beeswax!']
@@ -137,7 +135,7 @@ describe 'Form View', ->
         done()
 
     it 'should handle error with empty response', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         status: 500
 
       @form.save().fail (errors) ->
@@ -145,7 +143,7 @@ describe 'Form View', ->
         done()
 
     it 'should notify instance deferred on success', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         status: 204
 
       @form.deferred.progress ->
@@ -154,7 +152,7 @@ describe 'Form View', ->
       @form.save()
 
     it 'should fire a saved event on success', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         status: 204
 
       @form.on('saved', (->
@@ -163,7 +161,7 @@ describe 'Form View', ->
       @form.save()
 
     it 'should notify instance deferred on error', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         status: 400
         body:   JSON.stringify
           age: ['None uh yer beeswax!']
@@ -176,7 +174,7 @@ describe 'Form View', ->
       @form.save()
 
     it 'should insert server-side errors into the markup', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         status: 400
         body:   JSON.stringify
           age: ['None uh yer beeswax!']
@@ -191,7 +189,7 @@ describe 'Form View', ->
         done()
 
     it 'should emit a "failed" event with the errors', (done) ->
-      test.when 'POST', '/lils/billy', (req) ->
+      @server.when 'POST', '/lils/billy', (req) ->
         status: 400
         body:   JSON.stringify
           age: ['None uh yer beeswax!']
@@ -230,7 +228,7 @@ describe 'Form View', ->
         expect(errors['age'][0]).to.equal 'Invalid Number'
 
     it 'should disable the form until the save is complete', (done) ->
-      test.when 'POST', '/lils/billy', (req) =>
+      @server.when 'POST', '/lils/billy', (req) =>
         expect(@form.$el.find(':input:disabled')).to.have.length 9
         status: 204
 
@@ -287,7 +285,7 @@ describe 'Form View', ->
           done()
 
       it 'should remove errors when the problem is fixed', (done) ->
-        test.when 'POST', '/lils/billy', (req) ->
+        @server.when 'POST', '/lils/billy', (req) ->
           body: JSON.stringify(age: 18)
 
         res = @form.save().pipe null, (errs) =>
@@ -308,11 +306,7 @@ describe 'Form View', ->
 
 describe 'Date Field', ->
   beforeEach ->
-    test.create()
     @el = $('<input type="text" class="date"/>')
-
-  afterEach ->
-    test.destroy()
 
   describe 'when setting a value', ->
     it 'should set a date', ->
@@ -327,12 +321,6 @@ describe 'Date Field', ->
       expect(forms.dateField.get(@el)).to.equal '1999-04-22T13:45:55Z'
 
 describe 'Int Field', ->
-
-  beforeEach ->
-    test.create()
-
-  afterEach ->
-    test.destroy()
 
   describe 'when setting a value', ->
     it 'should set a zero when NaN', ->
@@ -364,12 +352,6 @@ describe 'Int Field', ->
       expect(forms.intField.get(@el)).to.equal 1234
 
 describe 'Non-Grouped Int Field', ->
-
-  beforeEach ->
-    test.create()
-
-  afterEach ->
-    test.destroy()
 
   describe 'when setting a value', ->
     it 'should set a zero when NaN', ->
@@ -403,11 +385,7 @@ describe 'Non-Grouped Int Field', ->
 describe 'Money Field', ->
 
   beforeEach ->
-    test.create()
     @el = $('<input type="text"/>')
-
-  afterEach ->
-    test.destroy()
 
   describe 'when setting a value', ->
     it 'should set a proper decimal', ->
@@ -433,11 +411,7 @@ describe 'Money Field', ->
 describe 'Float Field', ->
 
   beforeEach ->
-    test.create()
     @el = $('<input type="text"/>')
-
-  afterEach ->
-    test.destroy()
 
   describe 'when setting a value', ->
     it 'should set a proper decimal', ->
@@ -458,11 +432,7 @@ describe 'Float Field', ->
 describe 'Money Field', ->
 
   beforeEach ->
-    test.create()
     @el = $('<input type="text"/>')
-
-  afterEach ->
-    test.destroy()
 
   describe 'when getting a value', ->
     it 'should have 2 places', ->
@@ -483,7 +453,6 @@ describe 'Money Field', ->
 
 describe 'Date Time Field', ->
   beforeEach ->
-    test.create()
     @doc = $ """
       <p>
         <input type="text" name="start_date" class="date"/>
@@ -493,9 +462,6 @@ describe 'Date Time Field', ->
 
     @input = @doc.find '[name=start_date]'
     @date  = '1945-09-02T13:45:55Z'
-
-  afterEach ->
-    test.destroy()
 
   it 'should populate the time choices on set', ->
     $date = @input.filter('.date')
@@ -520,7 +486,6 @@ describe 'Date Time Field', ->
 
 describe 'End Date Time Field', ->
   beforeEach ->
-    test.create()
     @doc = $ """
       <p>
         <input type="text" name="start_date" class="date"/>
@@ -530,9 +495,6 @@ describe 'End Date Time Field', ->
 
     @input = @doc.find '[name=start_date]'
     @date  = '1945-09-02T13:45:55Z'
-
-  afterEach ->
-    test.destroy()
 
   it 'should populate the time choices on set', ->
     $date = @input.filter('.date')

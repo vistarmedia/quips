@@ -1,16 +1,10 @@
-test   = require '../setup'
+require '../setup'
 expect = require('chai').expect
 
 format = require 'lib/format'
 
 
 describe 'Format library', ->
-
-  beforeEach ->
-    test.create()
-
-  afterEach ->
-    test.destroy()
 
   it 'should format a date', ->
     date = '1890-05-23T12:00:00Z'

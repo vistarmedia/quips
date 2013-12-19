@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 
 NoticeView = require 'views/notice_view'
@@ -7,12 +7,10 @@ NoticeView = require 'views/notice_view'
 describe 'Notice View', ->
 
   beforeEach ->
-    test.create()
     @view = new NoticeView
 
   afterEach ->
     @view.remove()
-    test.destroy()
 
   describe 'By default', ->
     it 'should have no text', ->

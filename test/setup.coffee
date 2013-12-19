@@ -2,68 +2,21 @@ hem = require 'hem-haml-coffee'
 
 process.env.TZ = 'EST'
 
-jsdom = require('jsdom').jsdom
-global.document or= jsdom()
-global.window   or= global.document.createWindow()
+# setup:    window global, fake dom, jquery, jquery for Backbone
+# teardown: write empty string to document
+window = require('./fake/dom').window
+# setup:    window.confirm function to return true
+# teardown: restore original confirm function
+require('./fake/confirm')(window)
+# setup:    fake XMLHTTPRequest thru honk-test-net, sets @server
+# teardown: remove after each
+require('./fake/http')(window)
 
-global.window.confirm  = -> true
-global.jQuery          = require 'jqueryify'
-global.jQuery.contains = -> true
-
-Backbone        = require 'backbone'
-MockHttpServer  = require('./lib/mock_server').MockHttpServer
 
 require.extensions['.haml'] = (module, filename) ->
   module._compile(hem.compilers.haml(filename))
 
 
-class TestState
-
-  destroy: ->
-    module.exports.destroy()
-
-
-module.exports =
-  create: ->
-    @_setup()
-    @patterns = []
-    global.window.confirm = -> true
-    new TestState
-
-  destroy: ->
-    @server.stop()
-    document.write ''
-
-  when: (method, url, respond) ->
-    @patterns.push [method, url, respond]
-
-  fail: ->
-    throw new Error(arguments...)
-
-  _setup: ->
-    Backbone.$ = jQuery
-
-    chai = require 'chai'
-    ext  = require './lib/chai_extensions'
-    chai.use(ext)
-
-    @server = new MockHttpServer (req) => @_handleRequest req
-    @server.start()
-
-  _handleRequest: (request) ->
-    handed = false
-
-    for [method, url, respond] in @patterns
-      if method is request.method and url is request.url
-        try
-          resp = respond(request) or {}
-          resp.status   or= 200
-          resp.body     or= ''
-
-          request.receive resp.status, resp.body
-          handed = true
-        catch e
-          console.log(e.message)
-
-    unless handed
-      request.receive 404, 'Not Found'
+chai = require 'chai'
+ext  = require 'vistar-chai-extensions'
+chai.use(ext)

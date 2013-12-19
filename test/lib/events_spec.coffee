@@ -1,4 +1,4 @@
-test   = require '../setup'
+require '../setup'
 expect = require('chai').expect
 
 Model = require 'models/model'

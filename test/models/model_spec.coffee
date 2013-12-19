@@ -1,15 +1,9 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 
 Model = require 'models/model'
 
 describe 'Models', ->
-
-  beforeEach ->
-    @state = test.create()
-
-  afterEach ->
-    @state.destroy()
 
   it 'should extend the default dict', ->
     class MahModel extends Model

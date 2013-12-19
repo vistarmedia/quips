@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 
 Backbone  = require 'backbone'
@@ -10,12 +10,6 @@ Model = require 'models/model'
 
 
 describe 'View', ->
-
-  beforeEach ->
-    test.create()
-
-  afterEach ->
-    test.destroy()
 
   it 'should have a DOM element', ->
     class StaticView extends View

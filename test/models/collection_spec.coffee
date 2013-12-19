@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 _       = require 'underscore'
 
@@ -19,12 +19,6 @@ class MockColletion2 extends Collection
 
 
 describe 'Collection', ->
-
-  beforeEach ->
-    @state = test.create()
-
-  afterEach ->
-    @state.destroy()
 
   describe 'sorting', ->
 
@@ -61,11 +55,11 @@ describe 'Collection', ->
       @mock1FetchCount = 0
       @mock2FetchCount = 0
 
-      test.when 'GET', '/mock1/', =>
+      @server.when 'GET', '/mock1/', =>
         @mock1FetchCount++
         body: JSON.stringify([{id: 2}, {id: 3}])
 
-      test.when 'GET', '/mock2/', =>
+      @server.when 'GET', '/mock2/', =>
         @mock2FetchCount++
         body: JSON.stringify([{id: 1}])
 
@@ -94,7 +88,7 @@ describe 'Collection', ->
       expect(@mock2FetchCount).to.equal 2
 
     it 'should fetch the other collection when a model is saved', (done) ->
-      test.when 'PUT', '/mock1/2', ->
+      @server.when 'PUT', '/mock1/2', ->
         status: 204
 
       model = new MockModel1(id: 2)
@@ -127,11 +121,11 @@ describe 'Collection', ->
     it 'should always fetch the other collection second', ->
       @modelSaved = false
 
-      test.when 'PUT', '/mock1/2', =>
+      @server.when 'PUT', '/mock1/2', =>
         @modelSaved = true
         status: 200
 
-      test.when 'GET', '/mock2/', =>
+      @server.when 'GET', '/mock2/', =>
         if not @modelSaved
           throw new Exception('Fetched before model saved')
 

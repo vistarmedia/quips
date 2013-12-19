@@ -1,4 +1,4 @@
-test       = require '../setup'
+require '../setup'
 expect     = require('chai').expect
 $          = require 'jqueryify'
 
@@ -113,12 +113,10 @@ class WithNestedSubViews extends Controller
 describe 'Controller', ->
 
   beforeEach ->
-    test.create()
     @root = $('<div/>')
     @controller = new MyController el: @root
 
   afterEach ->
-    test.destroy()
     @controller.destroy()
 
   it 'should place views in its layout', ->
@@ -188,12 +186,10 @@ describe 'Controller', ->
   describe 'Controller with nested views', ->
 
     beforeEach ->
-      test.create()
       @root = $('<div/>')
       @controller = new WithNestedSubViews el: @root
 
     afterEach ->
-      test.destroy()
       @controller.destroy()
 
     it 'should load when lexographical', ->
@@ -246,7 +242,6 @@ describe 'Controller', ->
 
 describe 'Controller inheritance', ->
   beforeEach ->
-    test.create()
     @root = $('<div/>')
 
     class FirstChildController extends MyController
@@ -269,7 +264,6 @@ describe 'Controller inheritance', ->
     @controller = new SecondChildController el: @root
 
   afterEach: ->
-    test.destroy()
     @controller.destroy()
 
   it 'should be able to extend parent views', ->

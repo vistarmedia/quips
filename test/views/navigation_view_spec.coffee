@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 
 Model          = require 'models/model'
@@ -7,7 +7,6 @@ NavigationView = require 'views/navigation_view'
 
 describe 'NavigationView', ->
   beforeEach ->
-    @state = test.create()
     template = ->
       """
         <ul class="primary">
@@ -32,7 +31,6 @@ describe 'NavigationView', ->
     @find = (s) => @view.$el.find(s)
 
   afterEach ->
-    @state.destroy()
     @view.remove()
 
   # This will error out as of d5f00da

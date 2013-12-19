@@ -40,7 +40,5 @@ module.exports =
   # Formatters
   formatters:   require './lib/lib/format'
 
-  # Test
-  ChaiExtensions: require './test/lib/chai_extensions'
+  # Utilities
   Combiner: require './lib/lib/combiner'
-  MockHttpServer: require('./test/lib/mock_server').MockHttpServer

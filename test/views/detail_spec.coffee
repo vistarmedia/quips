@@ -1,4 +1,4 @@
-test    = require '../setup'
+require '../setup'
 expect  = require('chai').expect
 
 Model      = require 'models/model'
@@ -15,7 +15,6 @@ class TestDetailView extends DetailView
 describe 'Test Detail View', ->
 
   beforeEach ->
-    test.create()
 
     @view = new TestDetailView
     @item = new TestModel
@@ -24,7 +23,6 @@ describe 'Test Detail View', ->
 
   afterEach ->
     @view.remove()
-    test.destroy()
 
   it 'should show nothing by default', ->
     expect(@view.render().html()).to.be.empty
@@ -76,7 +74,7 @@ describe 'Test Detail View', ->
     @view.$el.find('.delete').click()
 
   it 'should be empty when the model is destroyed', ->
-    test.when 'DELETE', '/test/net-1', ->
+    @server.when 'DELETE', '/test/net-1', ->
       status: 204
 
     @view.show(@item)
