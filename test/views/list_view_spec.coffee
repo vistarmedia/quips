@@ -187,11 +187,13 @@ describe 'ListView', ->
       class MockListView extends lists.ListView
         comparators:
           name: (model) -> model.get('name')?.toLowerCase()
+          place: (model) -> model.get('name')?.toLowerCase()
 
         layout: -> """
           <table>
             <thead>
               <th class="sort" data-comparator="name" id="nameHeader"></th>
+              <th class="sort" data-comparator="place" id="placeHeader"></th>
             </thead>
             <tbody></tbody>
           </table>
@@ -202,14 +204,17 @@ describe 'ListView', ->
       @collection.add
         id: '1'
         name: 'AA model'
+        place: 'Out on Houston'
 
       @collection.add
         id: '2'
         name: 'CC model'
+        place: 'Broadway'
 
       @collection.add
         id: '3'
         name: 'bb model'
+        place: 'Browsin'
 
       @mlv = new MockListView(@collection, MockRowView).render()
 
@@ -271,3 +276,26 @@ describe 'ListView', ->
       rows = @mlv.listEl().find('tr')
       expect($(rows[2]).find('td').html()).to.equal 'CC model'
       expect($(rows[2])).class 'selected'
+
+    it 'should add a css class to header to indicate sorting', ->
+      header = @mlv.$el.find('#nameHeader')
+      header.click()
+
+      expect(header).to.have.class 'sorted'
+      expect(header).to.have.class 'direction-asc'
+
+      header.click()
+      expect(header).to.have.class 'direction-desc'
+
+    it 'should remove header sort class when another header is clicked', ->
+      nameHeader = @mlv.$el.find('#nameHeader')
+      nameHeader.click()
+
+      expect(nameHeader).to.have.class 'direction-asc'
+
+      placeHeader = @mlv.$el.find('#placeHeader')
+
+      placeHeader.click()
+
+      expect(nameHeader).not.to.have.class 'sorted'
+      expect(nameHeader).not.to.have.class 'direction-asc'

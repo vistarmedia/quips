@@ -1,4 +1,5 @@
 $ = require 'jqueryify'
+_ = require 'underscore'
 
 View = require './view'
 
@@ -78,12 +79,28 @@ class ListView extends View
     @items.setSorting(direction, @comparators[key])
 
   _sortClickHandler: (e) ->
-    comparator = $(e.target).data('comparator')
+    element = $(e.target)
+    comparator = element.data('comparator')
+
     if comparator? and @comparators[comparator]?
-      @sortBy(comparator)
+      direction = @_getSortDirection(comparator)
+      @_addSortClassForHeader(element, direction)
+      @sortBy(comparator, direction)
 
   _getSortDirection: (key) ->
     if @sortState[key] is 'ASC' then 'DESC' else 'ASC'
+
+  _addSortClassForHeader: (element, direction) ->
+    classes = _.values(@_cssSortingClasses).join(' ')
+    @$el.find('th').removeClass(classes)
+    element.addClass(@_cssClassForDirection(direction))
+
+  _cssSortingClasses:
+    'ASC':   'sorted direction-asc'
+    'DESC':  'sorted direction-desc'
+
+  _cssClassForDirection: (direction) ->
+    @_cssSortingClasses[direction] or ''
 
   _sortHandler: ->
     listEl = @listEl()
@@ -120,5 +137,5 @@ class ListView extends View
 
 
 module.exports =
-  ListView: ListView
-  RowView: RowView
+  ListView:  ListView
+  RowView:   RowView
