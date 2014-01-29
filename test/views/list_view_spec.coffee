@@ -299,3 +299,53 @@ describe 'ListView', ->
 
       expect(nameHeader).not.to.have.class 'sorted'
       expect(nameHeader).not.to.have.class 'direction-asc'
+
+    it 'should use a default sorting', ->
+      class MockDefaultSortRowView extends lists.RowView
+        tagName: 'tr'
+        template: (model) -> "<td>#{model.name}</td>"
+        constructor: (@model) ->
+          super(@model, @template)
+
+      class MockDefaultSortListView extends lists.ListView
+        comparators:
+          name: (model) -> model.get('name')?.toLowerCase()
+
+        layout: -> """
+          <table>
+            <thead>
+              <th class="sort" data-comparator="name" id="nameHeader"></th>
+            </thead>
+            <tbody></tbody>
+          </table>
+        """
+
+        listEl: -> @$el.find('tbody')
+
+        defaultSort: ['name', 'ASC']
+
+      collection = new Collection([
+        new Model(
+          id: '1'
+          name: 'AA model'
+        ),
+        new Model(
+          id: '2'
+          name: 'CC model'
+        ),
+        new Model(
+          id: '3'
+          name: 'bb model'
+        )])
+
+      mlv = new MockDefaultSortListView(collection, MockDefaultSortRowView)
+
+      rows = mlv.listEl().find('tr')
+      expect($(rows[0]).find('td').html()).to.equal 'AA model'
+      expect($(rows[1]).find('td').html()).to.equal 'CC model'
+      expect($(rows[2]).find('td').html()).to.equal 'bb model'
+      mlv.render()
+      newRows = mlv.listEl().find('tr')
+      expect($(newRows[0]).find('td').html()).to.equal 'AA model'
+      expect($(newRows[1]).find('td').html()).to.equal 'bb model'
+      expect($(newRows[2]).find('td').html()).to.equal 'CC model'

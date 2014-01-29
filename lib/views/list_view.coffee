@@ -35,6 +35,8 @@ class ListView extends View
 
   layout: null
 
+  defaultSort: null
+
   comparators: {}
 
   listEl: ->
@@ -75,8 +77,11 @@ class ListView extends View
   sortBy: (key, direction) ->
     unless direction is 'ASC' or direction is 'DESC'
       direction = @_getSortDirection(key)
+    @sortState = {}
     @sortState[key] = direction
     @items.setSorting(direction, @comparators[key])
+    element = @$el.find(".sort[data-comparator=#{key}]")
+    @_addSortClassForHeader(element, direction)
 
   _sortClickHandler: (e) ->
     element = $(e.target)
@@ -84,7 +89,6 @@ class ListView extends View
 
     if comparator? and @comparators[comparator]?
       direction = @_getSortDirection(comparator)
-      @_addSortClassForHeader(element, direction)
       @sortBy(comparator, direction)
 
   _getSortDirection: (key) ->
@@ -132,6 +136,8 @@ class ListView extends View
     @selectedItem = null if @selectedItem is item
 
   render: ->
+    if _.isEmpty(@sortState) and @defaultSort?
+      @sortBy(@defaultSort[0], @defaultSort[1])
     @populate()
     this
 
