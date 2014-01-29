@@ -59,6 +59,7 @@ describe 'Pageable Collection', ->
     it 'should handle adds to the parent collection', ->
       @pageableCollection.setSorting('ASC', (model) -> model.get('name'))
       equalsACD = =>
+        expect(@pageableCollection.length).to.equal 3
         expect(@pageableCollection.models[0].get('name')).to.equal 'A'
         expect(@pageableCollection.models[1].get('name')).to.equal 'C'
         expect(@pageableCollection.models[2].get('name')).to.equal 'D'
@@ -78,10 +79,12 @@ describe 'Pageable Collection', ->
       expect(@pageableCollection.models[2].get('name')).to.equal 'C'
 
       @pageableCollection.getPage(2)
+      expect(@pageableCollection.length).to.equal 3
       expect(@pageableCollection.models[0].get('name')).to.equal 'D'
       expect(@pageableCollection.models[1].get('name')).to.equal 'E'
       expect(@pageableCollection.models[2].get('name')).to.equal 'F'
       @collection.add(@collection.create name: 'BB')
+      expect(@pageableCollection.length).to.equal 3
       expect(@pageableCollection.models[0].get('name')).to.equal 'C'
       expect(@pageableCollection.models[1].get('name')).to.equal 'D'
       expect(@pageableCollection.models[2].get('name')).to.equal 'E'

@@ -87,9 +87,10 @@ class PageableCollection extends Collection
       if @length > @state.pageSize
         @remove(@at(@state.pageSize))
     else if addedIndex < pageStart and @state.currentPage > 1
+      @add(@fullCollection.at(pageStart), at: 0)
+      # Remove the last item if the item we added makes the page too large
       if @length > @state.pageSize
         @remove(@at(@state.pageSize))
-      @add(@fullCollection.at(pageStart), at: 0)
     @trigger('sort')
 
   _removeHandler: (model, collection, options) ->
