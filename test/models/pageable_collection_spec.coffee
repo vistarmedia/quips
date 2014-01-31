@@ -2,6 +2,7 @@ require '../setup'
 expect = require('chai').expect
 
 Collection         = require 'models/collection'
+FilteredCollection = require 'models/filtered_collection'
 Model              = require 'models/model'
 PageableCollection = require 'models/pageable_collection'
 
@@ -47,11 +48,11 @@ describe 'Pageable Collection', ->
     beforeEach ->
       @collection.comparator = 'name'
       @collection.add([
-        @collection.create(name: 'A'),
-        @collection.create(name: 'C'),
-        @collection.create(name: 'D'),
-        @collection.create(name: 'E'),
-        @collection.create(name: 'F')
+        @collection.create(id: 1, name: 'A'),
+        @collection.create(id: 2, name: 'C'),
+        @collection.create(id: 3, name: 'D'),
+        @collection.create(id: 4, name: 'E'),
+        @collection.create(id: 5, name: 'F')
       ])
       @pageableCollection = new PageableCollection(@collection, pageSize: 3)
       expect(@pageableCollection.length).to.equal 3
@@ -170,6 +171,24 @@ describe 'Pageable Collection', ->
       @collection.comparator = 'name'
       @collection.sort()
       expect(@pageableCollection.models[1].get('name')).to.equal 'B'
+
+    it 'should handle removes from a filtered collection', ->
+      filteredCollection = new FilteredCollection(@collection)
+      pageableCollection = new PageableCollection(filteredCollection,
+        pageSize: 3)
+
+      expect(pageableCollection.length).to.equal 3
+      expect(pageableCollection.models[0].get('name')).to.equal 'A'
+      expect(pageableCollection.models[1].get('name')).to.equal 'C'
+      expect(pageableCollection.models[2].get('name')).to.equal 'D'
+
+      filteredCollection.addFilter 'name', (m) ->
+        m.get('name') in ['A', 'E', 'F']
+
+      expect(pageableCollection.length).to.equal 3
+      expect(pageableCollection.models[0].get('name')).to.equal 'A'
+      expect(pageableCollection.models[1].get('name')).to.equal 'E'
+      expect(pageableCollection.models[2].get('name')).to.equal 'F'
 
   describe 'sorting', ->
 

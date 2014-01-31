@@ -103,16 +103,14 @@ class PageableCollection extends Collection
     pageStart = (@state.currentPage - 1) * @state.pageSize
     pageEnd = pageStart + @state.pageSize
     removedIndex = options.index
-    modelRemoved = false
     if removedIndex >= pageStart and removedIndex < pageEnd
-      modelRemoved = true
       @remove(model)
     else if removedIndex < pageStart
-      modelRemoved = true
       @remove(@at(0))
 
-    if oldTotalPages > @state.currentPage and modelRemoved
-      nextModel = @fullCollection.at(pageEnd - 1)
+    if oldTotalPages > @state.currentPage and @length < @state.pageSize
+      nextModel = _(@fullCollection.slice(pageEnd - 1)).find (m) =>
+        not @contains(m)
       if nextModel? then @push(nextModel)
 
   _resetHandler: ->
