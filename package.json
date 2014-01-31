@@ -1,6 +1,6 @@
 {
   "name": "quips",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "dependencies": {
     "backbone": "1.0.0",
     "coffee-script": "1.6.x",
@@ -18,7 +18,8 @@
     "mocha": "1.12.0",
     "request": "2.27.0",
     "vistar-chai-extensions": "0.0.1",
-    "honk-test-net": "0.0.3"
+    "honk-test-net": "0.0.3",
+    "coffeelint": "~1.0.7"
   },
   "optionalDependencies": {},
   "engines": {
@@ -32,6 +33,7 @@
   },
   "main": "./index.coffee",
   "scripts": {
-    "test": "make test"
+    "test": "make test",
+    "lint": "coffeelint lib index.coffee"
   }
 }
