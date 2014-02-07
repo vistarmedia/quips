@@ -12,13 +12,14 @@ module.exports =
 
     for name, collectionType of collectionTypes
       collection = new collectionType
+      collectionRoot = collection.apiRoot or apiRoot
       do (collection) ->
         if $.isFunction(collection.url)
           urlFunc = collection.url
           collection.url = ->
-            apiRoot + urlFunc()
+            collectionRoot + urlFunc()
         else
-          collection.url = apiRoot + collection.url
+          collection.url = collectionRoot + collection.url
         collections[name] = collection
 
     root = apiRoot

@@ -10,28 +10,57 @@ load = require('models/loader').load
 
 class MockModel extends Model
 
+class MockCollection extends Collection
+  model: MockModel
+  url:   '/my/mock/url'
+
+
 describe 'Model Loader', ->
 
   it 'should handle collections with a url func', (done) ->
+
+    class MockFuncCollection extends Collection
+      model: MockModel
+      url:   -> '/my/mock/func/url'
+
     @server.when 'GET', 'api-root/my/mock/url', (req) ->
       status: 204
 
     @server.when 'GET', 'api-root/my/mock/func/url', (req) ->
       status: 204
 
-    class MockCollection extends Collection
-      model: MockModel
-      url:   '/my/mock/url'
-
-    class MockFuncCollection extends Collection
-      model: MockModel
-      url:   -> '/my/mock/func/url'
-
     collections =
       value:  MockCollection
       func:   MockFuncCollection
 
     load(collections, 'api-root').done ->
+      done()
+
+  it 'should allow apiRoot to be overridden per collection', (done) ->
+
+    class MockRootOverrideCollection extends Collection
+      model:    MockModel
+      url:      '/my/mock/url'
+      apiRoot:  'new-root'
+
+    collectionOneFetches = 0
+    collectionTwoFetches = 0
+
+    @server.when 'GET', 'api-root/my/mock/url', (req) ->
+      collectionOneFetches++
+      status: 204
+
+    @server.when 'GET', 'new-root/my/mock/url', (req) ->
+      collectionTwoFetches++
+      status: 204
+
+    collections =
+      one: MockCollection
+      two: MockRootOverrideCollection
+
+    load(collections, 'api-root').done ->
+      expect(collectionOneFetches).to.equal 1
+      expect(collectionTwoFetches).to.equal 1
       done()
 
   describe 'when loading multiple collections with url functions', ->
