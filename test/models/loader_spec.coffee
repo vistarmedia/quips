@@ -5,7 +5,8 @@ $       = require 'jqueryify'
 Collection  = require 'models/collection'
 Model       = require 'models/model'
 
-load = require('models/loader').load
+load    = require('models/loader').load
+loadAll = require('models/loader').loadAll
 
 
 class MockModel extends Model
@@ -62,6 +63,37 @@ describe 'Model Loader', ->
       expect(collectionOneFetches).to.equal 1
       expect(collectionTwoFetches).to.equal 1
       done()
+
+  it 'should pass through options to collections', (done) ->
+
+    class MockPassthroughCollection extends Collection
+      constructor: (opts) ->
+        expect(opts.testing).to.equal 4
+        done()
+
+    load({one: MockPassthroughCollection}, 'api-root', {testing: 4})
+
+  it 'should load from multiple roots', (done) ->
+    oneHit = false
+    twoHit = false
+
+    @server.when 'GET', 'root-one/my/mock/url', ->
+      done() if twoHit
+      oneHit = true
+
+    @server.when 'GET', 'root-two/my/mock/url', ->
+      done() if oneHit
+      twoHit = true
+
+    collectionsOne =
+      one: MockCollection
+
+    collectionsTwo =
+      two: MockCollection
+
+    loadAll
+      'root-one': collectionsOne
+      'root-two': collectionsTwo
 
   describe 'when loading multiple collections with url functions', ->
 

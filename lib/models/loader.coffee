@@ -1,36 +1,40 @@
 $ = require 'jqueryify'
+_ = require 'underscore'
+
 combine = require('../lib/combiner').combine
 
-root = ''
+
+_load = (collectionTypes, apiRoot, opts, collections) ->
+  apiRoot or= ''
+
+  for name, collectionType of collectionTypes
+    collection = new collectionType(opts)
+    collectionRoot = collection.apiRoot or apiRoot
+    do (collection) ->
+      collection.url = collectionRoot + _.result(collection, 'url')
+      collections[name] = collection
+
+_combine = (collections) ->
+
+  combine((c.fetch() for n, c of collections when not c.lazy))
+    .pipe(-> collections)
+    .done ->
+      for n, c of collections
+        c._collections = collections
+    .promise()
 
 
 module.exports =
 
-  load: (collectionTypes, apiRoot) ->
-    apiRoot or= ''
+  loadAll: (collectionTypeSet, opts) ->
     collections = {}
 
-    for name, collectionType of collectionTypes
-      collection = new collectionType
-      collectionRoot = collection.apiRoot or apiRoot
-      do (collection) ->
-        if $.isFunction(collection.url)
-          urlFunc = collection.url
-          collection.url = ->
-            collectionRoot + urlFunc()
-        else
-          collection.url = collectionRoot + collection.url
-        collections[name] = collection
+    for apiRoot, collectionTypes of collectionTypeSet
+      _load(collectionTypes, apiRoot, opts, collections)
 
-    root = apiRoot
+    _combine collections
 
-    combine((c.fetch() for _, c of collections when not c.lazy))
-      .pipe(-> collections)
-      .done ->
-        for _, c of collections
-          c._collections = collections
-      .promise()
-
-
-  getApiRoot: ->
-    root
+  load: (collectionTypes, apiRoot, opts) ->
+    collections = {}
+    _load(collectionTypes, apiRoot, opts, collections)
+    _combine collections
