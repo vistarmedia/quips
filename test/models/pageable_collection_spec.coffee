@@ -190,6 +190,18 @@ describe 'Pageable Collection', ->
       expect(pageableCollection.models[1].get('name')).to.equal 'E'
       expect(pageableCollection.models[2].get('name')).to.equal 'F'
 
+    it 'should always remove models removed from the collection', (done) ->
+      collection = new MockCollection()
+      pageableCollection = new PageableCollection(collection, pageSize: 1)
+      assertions = ->
+        expect(pageableCollection).to.have.length 0
+        done()
+      pageableCollection.on('remove', assertions, this)
+
+      model = collection.create(name: 'a')
+      collection.add(model)
+      collection.trigger('remove', model, collection, index: 1)
+
   describe 'sorting', ->
 
     it 'should be able to sort across pages`', ->

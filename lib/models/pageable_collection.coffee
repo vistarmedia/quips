@@ -103,10 +103,10 @@ class PageableCollection extends Collection
     pageStart = (@state.currentPage - 1) * @state.pageSize
     pageEnd = pageStart + @state.pageSize
     removedIndex = options.index
-    if removedIndex >= pageStart and removedIndex < pageEnd
-      @remove(model)
-    else if removedIndex < pageStart
+    if removedIndex < pageStart
       @remove(@at(0))
+    else
+      @remove(model)
 
     if oldTotalPages > @state.currentPage and @length < @state.pageSize
       nextModel = _(@fullCollection.slice(pageEnd - 1)).find (m) =>
