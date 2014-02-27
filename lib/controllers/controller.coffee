@@ -11,7 +11,7 @@ class Controller extends Backbone.Router
   events: {}
 
   constructor: (opts) ->
-    mergeAttributes(this, 'events', 'views')
+    mergeAttributes(this, 'events', 'views', 'routes')
     super
 
     @history = if (opts? and opts.history?)

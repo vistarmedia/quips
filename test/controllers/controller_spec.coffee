@@ -40,6 +40,10 @@ class MyController extends Controller
     'viewOne.click':  'eatASandwich'
     'viewTwo.click':  'goForAWalk'
 
+  routes:
+    'one/': 'one'
+    'two/': 'two'
+
   constructor: ->
     @viewOne = new EchoView('View One').render()
     @viewTwo = new EchoView('View Two').render()
@@ -253,6 +257,9 @@ describe 'Controller inheritance', ->
       events: ->
         'viewThree.click': 'haveSwag'
 
+      routes:
+        'three/': 'three'
+
       constructor: ->
         @viewThree = new EchoView('View Three').render()
         @swagsHad = 0
@@ -291,3 +298,8 @@ describe 'Controller inheritance', ->
     expect(@controller.sandwichesEaten).to.equal 1
     expect(@controller.walksTaken).to.equal 1
     expect(@controller.swagsHad).to.equal 1
+
+  it 'should be able to extend parent routes', ->
+    expect(@controller.routes).to.have.property 'one/'
+    expect(@controller.routes).to.have.property 'two/'
+    expect(@controller.routes).to.have.property 'three/'
