@@ -1,6 +1,6 @@
 {
   "name": "quips",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "dependencies": {
     "backbone": "1.0.0",
     "coffee-script": "1.6.x",

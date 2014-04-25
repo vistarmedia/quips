@@ -10,8 +10,10 @@ _load = (collectionTypes, apiRoot, opts, collections) ->
   for name, collectionType of collectionTypes
     collection = new collectionType(opts)
     collectionRoot = collection.apiRoot or apiRoot
-    do (collection) ->
-      collection.url = collectionRoot + _.result(collection, 'url')
+    do (collectionRoot, collection) ->
+      collection._origUrl = collection.url
+      collection.url = ->
+        collectionRoot + _.result(collection, '_origUrl')
       collections[name] = collection
 
 _combine = (collections) ->

@@ -1,6 +1,7 @@
 require '../setup'
-expect  = require('chai').expect
-$       = require 'jqueryify'
+expect = require('chai').expect
+$      = require 'jqueryify'
+_      = require 'underscore'
 
 Collection  = require 'models/collection'
 Model       = require 'models/model'
@@ -162,4 +163,24 @@ describe 'Model Loader', ->
       expect(collections.regular._collections.lazy.models).to.have.length 0
       expect(collections.lazy._collections.regular.models).to.have.length 1
 
+      done()
+
+  it 'should allow dynamic attributes to be used in a url function', (done) ->
+    class ScorpionCollection extends Collection
+      number: 10
+      model:  MockModel
+      url: ->
+        "/scorpions/with/#{@number}/legs"
+
+    @server.when 'GET', '/scorpions/with/10/legs', (req) ->
+      status: 200
+      body: '{"id": "lazy-item-1"}'
+
+    collectionTypes =
+      scorpions:  ScorpionCollection
+
+    load(collectionTypes).done (collections) ->
+      collection = collections.scorpions
+      collection.number = 20
+      expect(_.result(collection, 'url')).to.equal '/scorpions/with/20/legs'
       done()
