@@ -47,7 +47,7 @@ class FormView extends View
 
     try
       update = @_getUpdate()
-      @model.save(update, quiet: true)
+      @model.save(update, wait: true)
         .done(onSuccess)
         .fail (resp) ->
           respJson = if resp.responseText

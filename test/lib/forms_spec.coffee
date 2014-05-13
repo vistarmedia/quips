@@ -142,6 +142,19 @@ describe 'Form View', ->
         expect(errors).to.not.be.an.instanceof(SyntaxError)
         done()
 
+    it 'should not set attributes on model if save fails', (done) ->
+      @server.when 'POST', '/lils/billy', (req) ->
+        status: 400
+        body:   JSON.stringify
+          name: ['Absolutely not.']
+
+      @form.$el.find('[name=name]').val('Auuuuuuuuuustin!')
+
+      @form.save().fail (errors) =>
+        expect(@lilBilly.get('name')).to.equal "Li'l Billy"
+        expect(@lilBilly.get('name')).not.to.equal 'Auuuuuuuuuustin!'
+        done()
+
     it 'should notify instance deferred on success', (done) ->
       @server.when 'POST', '/lils/billy', (req) ->
         status: 204
