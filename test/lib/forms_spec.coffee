@@ -110,6 +110,7 @@ describe 'Form View', ->
 
     it 'should post the update to the server', (done) ->
       @server.when 'POST', '/lils/billy', (req) ->
+        status: 201
         body: JSON.stringify
           age:  -1
           name: 'Steve'
@@ -140,6 +141,17 @@ describe 'Form View', ->
 
       @form.save().fail (errors) ->
         expect(errors).to.not.be.an.instanceof(SyntaxError)
+        expect(errors).to.be.an.instanceOf Object
+        done()
+
+    it 'should handle error with non-json response', (done) ->
+      @server.when 'POST', '/lils/billy', (req) ->
+        status: 404
+        body:   "<html><body><h1>NOT FOUND</h1></body></html>"
+
+      @form.save().fail (errors) ->
+        expect(errors).to.not.be.an.instanceof(SyntaxError)
+        expect(errors).to.be.an.instanceOf Object
         done()
 
     it 'should not set attributes on model if save fails', (done) ->
@@ -299,7 +311,8 @@ describe 'Form View', ->
 
       it 'should remove errors when the problem is fixed', (done) ->
         @server.when 'POST', '/lils/billy', (req) ->
-          body: JSON.stringify(age: 18)
+          status:  201
+          body:    JSON.stringify(age:  18)
 
         res = @form.save().pipe null, (errs) =>
           root = @form.$el
@@ -316,6 +329,7 @@ describe 'Form View', ->
           expect(root.find('.age-div.error')).to.have.length 0
 
           done()
+
 
 describe 'Date Field', ->
   beforeEach ->

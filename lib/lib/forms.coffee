@@ -50,9 +50,9 @@ class FormView extends View
       @model.save(update, wait: true)
         .done(onSuccess)
         .fail (resp) ->
-          respJson = if resp.responseText
+          respJson = try
             JSON.parse(resp.responseText)
-          else
+          catch
             {}
 
           onError(respJson)
