@@ -8,7 +8,7 @@ mergeAttributes = require '../lib/merge_attributes'
 
 class View extends Backbone.View
   constructor: ->
-    mergeAttributes(this, 'events', 'views')
+    mergeAttributes(this, 'events', 'views', 'elements', 'fields')
     super
 
     if navigator?
