@@ -183,27 +183,3 @@ describe 'View', ->
     view.$el.find('span').click()
     view.$el.find('div').click()
     expect(view.string).to.equal 'Test extends events'
-
-  it 'should be able to extend a parent views elements', ->
-    class ParentView extends View
-      template: -> """
-        <div id='a_div'></div>
-        <a id='a_link'></a>
-        <span></span>
-      """
-
-      elements:
-        'a': '$link'
-
-      string: ""
-
-    # Test no events object
-    class FirstChildView extends ParentView
-
-    class SecondChildView extends FirstChildView
-      elements:
-        'div': '$div'
-
-    view = new SecondChildView().render()
-    expect(view.$link.attr('id')).to.equal('a_link')
-    expect(view.$div.attr('id')).to.equal('a_div')
