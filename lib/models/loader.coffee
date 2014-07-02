@@ -1,20 +1,17 @@
-$ = require 'jqueryify'
 _ = require 'underscore'
 
 combine = require('../lib/combiner').combine
 
 
-_load = (collectionTypes, apiRoot, opts, collections) ->
+_load = (collections, apiRoot) ->
   apiRoot or= ''
 
-  for name, collectionType of collectionTypes
-    collection = new collectionType(opts)
+  for name, collection of collections
     collectionRoot = collection.apiRoot or apiRoot
     do (collectionRoot, collection) ->
       collection._origUrl = collection.url
       collection.url = ->
         collectionRoot + _.result(collection, '_origUrl')
-      collections[name] = collection
 
 _combine = (collections) ->
 
@@ -28,15 +25,15 @@ _combine = (collections) ->
 
 module.exports =
 
-  loadAll: (collectionTypeSet, opts) ->
-    collections = {}
+  loadAll: (collectionSet) ->
 
-    for apiRoot, collectionTypes of collectionTypeSet
-      _load(collectionTypes, apiRoot, opts, collections)
+    allCollections = {}
+    for apiRoot, collections of collectionSet
+      _.extend(allCollections, collections)
+      _load(collections, apiRoot)
 
-    _combine collections
+    _combine allCollections
 
-  load: (collectionTypes, apiRoot, opts) ->
-    collections = {}
-    _load(collectionTypes, apiRoot, opts, collections)
+  load: (collections, apiRoot) ->
+    _load(collections, apiRoot)
     _combine collections

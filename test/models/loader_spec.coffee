@@ -32,8 +32,8 @@ describe 'Model Loader', ->
       status: 204
 
     collections =
-      value:  MockCollection
-      func:   MockFuncCollection
+      value:  new MockCollection
+      func:   new MockFuncCollection
 
     load(collections, 'api-root').done ->
       done()
@@ -57,22 +57,13 @@ describe 'Model Loader', ->
       status: 204
 
     collections =
-      one: MockCollection
-      two: MockRootOverrideCollection
+      one: new MockCollection
+      two: new MockRootOverrideCollection
 
     load(collections, 'api-root').done ->
       expect(collectionOneFetches).to.equal 1
       expect(collectionTwoFetches).to.equal 1
       done()
-
-  it 'should pass through options to collections', (done) ->
-
-    class MockPassthroughCollection extends Collection
-      constructor: (opts) ->
-        expect(opts.testing).to.equal 4
-        done()
-
-    load({one: MockPassthroughCollection}, 'api-root', {testing: 4})
 
   it 'should load from multiple roots', (done) ->
     oneHit = false
@@ -87,10 +78,10 @@ describe 'Model Loader', ->
       twoHit = true
 
     collectionsOne =
-      one: MockCollection
+      one: new MockCollection
 
     collectionsTwo =
-      two: MockCollection
+      two: new MockCollection
 
     loadAll
       'root-one': collectionsOne
@@ -119,8 +110,8 @@ describe 'Model Loader', ->
         url:   -> '/my/mock/func/url2'
 
       collections =
-        funcOne: FuncOneCollection
-        funcTwo: FuncTwoCollection
+        funcOne: new FuncOneCollection
+        funcTwo: new FuncTwoCollection
 
       load(collections, 'api-root').done ->
         expect(collectionOneFetches).to.equal 1
@@ -151,8 +142,8 @@ describe 'Model Loader', ->
       lazy:   true
 
     collectionTypes =
-      regular:  RegularCollection
-      lazy:     LazyCollection
+      regular:  new RegularCollection
+      lazy:     new LazyCollection
 
     load(collectionTypes).done (collections) ->
       expect(fetches).to.equal 1
@@ -177,7 +168,7 @@ describe 'Model Loader', ->
       body: '{"id": "lazy-item-1"}'
 
     collectionTypes =
-      scorpions:  ScorpionCollection
+      scorpions:  new ScorpionCollection
 
     load(collectionTypes).done (collections) ->
       collection = collections.scorpions
