@@ -41,23 +41,19 @@ class FilteredCollection extends Collection
   # Perform an internal update, adding models which are now valid and removing
   # models which are now invalid.
   update: =>
-    toAdd = []
-    toRemove = []
-
     for model in @collection.models
       # When the model is valid, see if we hold a copy of it. If so, do
       # nothing. Otherwise, add it.
       if @isValid(model)
-        if not @get(model.id) then toAdd.push model
+        if not @get(model.id) then @add model, sort: false
 
       # When the model is invalid, see if a copy is held in this colleciton.
       # If so, remove it. Otherwise, do nothing.
       else
-        if @get(model.id) then toRemove.push model
+        if @get(model.id) then @remove model
 
-    @add toAdd
-    @remove toRemove
-    @trigger('change')
+    @sort() if @comparator?
+    this
 
 
 module.exports = FilteredCollection
