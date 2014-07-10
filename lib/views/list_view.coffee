@@ -84,7 +84,7 @@ class ListView extends View
     @_addSortClassForHeader(element, direction)
 
   _sortClickHandler: (e) ->
-    element = $(e.target)
+    element = $(e.currentTarget)
     comparator = element.data('comparator')
 
     if comparator? and @comparators[comparator]?
