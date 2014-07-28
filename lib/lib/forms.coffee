@@ -52,7 +52,7 @@ class FormView extends View
         .fail (resp) ->
           respJson = try
             JSON.parse(resp.responseText)
-          catch
+          catch e
             {}
 
           onError(respJson)
@@ -190,6 +190,22 @@ moneyField =
     el.val(Format.commafy(moneyFloat.toFixed(2)))
 
 
+moneyCentsField =
+  get: (el, defaultValue) ->
+    stripped = el.val().replace(/\,/g, '')
+    money = parseInt(parseFloat(stripped) * 100, 10)
+    if _.isNaN(money)
+      return defaultValue if defaultValue?
+      throw TypeError('Invalid Number')
+    money
+
+  set: (el, value) ->
+    moneyFloat = parseFloat(value) / 100
+    if _.isNaN(moneyFloat)
+      moneyFloat = 0
+    el.val(Format.commafy(moneyFloat.toFixed(2)))
+
+
 boolField =
   get: (el) -> el.prop('checked')
   set: (el, value) -> el.prop('checked', value)
@@ -267,6 +283,7 @@ module.exports =
   nonGroupedIntField: nonGroupedIntField
   floatField:         floatField
   moneyField:         moneyField
+  moneyCentsField:    moneyCentsField
   boolField:          boolField
   dateField:          dateField
   dateTimeField:      dateTimeField

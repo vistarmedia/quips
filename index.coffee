@@ -35,6 +35,7 @@ module.exports =
   intField:           require('./lib/lib/forms').intField
   nonGroupedIntField: require('./lib/lib/forms').nonGroupedIntField
   moneyField:         require('./lib/lib/forms').moneyField
+  moneyCentsField:    require('./lib/lib/forms').moneyCentsField
   stringField:        require('./lib/lib/forms').stringField
 
   # Formatters

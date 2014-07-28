@@ -435,6 +435,33 @@ describe 'Money Field', ->
       forms.moneyField.set(@el, '12345678.38')
       expect(@el.val()).to.equal('12,345,678.38')
 
+describe 'Money Cents Field', ->
+
+  beforeEach ->
+    @el = $('<input type="text"/>')
+
+  describe 'when setting a value', ->
+    it 'should set and get a field', ->
+      @el.val('')
+      forms.moneyCentsField.set(@el, '123')
+      expect(@el.val()).to.equal('1.23')
+      expect(forms.moneyCentsField.get(@el)).to.equal(123)
+
+    it 'should set a zero when NaN', ->
+      @el.val('')
+      forms.moneyCentsField.set(@el, NaN)
+      expect(@el.val()).to.equal('0.00')
+
+    it 'should set a zero when no value', ->
+      @el.val('')
+      forms.moneyCentsField.set(@el, '')
+      expect(@el.val()).to.equal('0.00')
+
+    it 'should commafy value', ->
+      @el.val('')
+      forms.moneyCentsField.set(@el, '12345678')
+      expect(@el.val()).to.equal('123,456.78')
+
 describe 'Float Field', ->
 
   beforeEach ->
