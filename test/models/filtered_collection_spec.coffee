@@ -94,7 +94,7 @@ describe 'Filtered Collection', ->
     expect(filtered.length).to.equal 1
     expect(filtered.models[0]).to.equal @m2
 
-  it 'should trigger a filtered event when the model changes', (done) ->
+  it 'should trigger an event when the model changes', (done) ->
     filtered = new FilteredCollection @collection
 
     @timesCalled = 0
@@ -106,3 +106,16 @@ describe 'Filtered Collection', ->
     _.defer =>
       expect(@timesCalled).to.equal 1
       done()
+
+  it 'should trigger a \'filtered\' event', (done) ->
+    filtered = new FilteredCollection @collection
+    called = 0
+    filtered.on 'filtered', (->
+      called += 1
+      if called is 2
+        done()), this
+
+    filtered.addFilter 'name', (m) ->
+      m.get('name') is 'm1'
+
+    filtered.removeFilter 'name'

@@ -53,6 +53,7 @@ class FilteredCollection extends Collection
         if @get(model.id) then @remove model
 
     @sort() if @comparator?
+    @trigger 'filtered'
     this
 
 
