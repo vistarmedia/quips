@@ -1,6 +1,5 @@
 require '../setup'
 expect = require('chai').expect
-_      = require 'underscore'
 
 Collection         = require 'models/collection'
 FilteredCollection = require 'models/filtered_collection'
@@ -94,18 +93,17 @@ describe 'Filtered Collection', ->
     expect(filtered.length).to.equal 1
     expect(filtered.models[0]).to.equal @m2
 
-  it 'should trigger an event when the model changes', (done) ->
+  it 'should trigger a reset event', (done) ->
     filtered = new FilteredCollection @collection
 
-    @timesCalled = 0
-    @m1.on('remove', (-> @timesCalled++), this)
+    timesCalled = 0
+    filtered.on('reset', (->
+      timesCalled++
+      if timesCalled is 1
+        done()), this)
 
     filtered.addFilter 'name', (m) ->
       m.get('name') is 'm2'
-
-    _.defer =>
-      expect(@timesCalled).to.equal 1
-      done()
 
   it 'should trigger a \'filtered\' event', (done) ->
     filtered = new FilteredCollection @collection

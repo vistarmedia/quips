@@ -45,15 +45,16 @@ class FilteredCollection extends Collection
       # When the model is valid, see if we hold a copy of it. If so, do
       # nothing. Otherwise, add it.
       if @isValid(model)
-        if not @get(model.id) then @add model, sort: false
+        if not @get(model.id) then @add model, {sort: false, silent: true}
 
       # When the model is invalid, see if a copy is held in this colleciton.
       # If so, remove it. Otherwise, do nothing.
       else
-        if @get(model.id) then @remove model
+        if @get(model.id) then @remove model, {silent: true}
 
     @sort() if @comparator?
     @trigger 'filtered'
+    @trigger 'reset'
     this
 
 
