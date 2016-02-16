@@ -2,7 +2,7 @@ $     = require 'jqueryify'
 JSON  = require 'json2ify'
 
 
-authUrl = '/session/'
+authUrl = '/session'
 
 
 class User
@@ -20,7 +20,7 @@ class User
   # if omitted, by it will always be used after its been set.
   @authenticateAgainst: (rootUrl) ->
     return unless rootUrl?
-    authUrl = rootUrl + '/session/'
+    authUrl = rootUrl + '/session'
 
   # Given an email and password autentication, return the user in question, or
   # an error (which always indicates that the credentials cannot be validated)
@@ -46,7 +46,7 @@ class User
     else
       'Invalid Login'
 
-  # Ping /session/ to see if we're already logged in. This will retern a deferrand
+  # Ping /session to see if we're already logged in. This will return a deferred
   # who's `done` will be handed the current user, and who's `fail` will have the
   # response from the server.
   @fetch: ->
